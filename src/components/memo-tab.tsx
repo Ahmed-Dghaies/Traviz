@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { useTripsStore } from "@/components/trips-store";
+import { useGetMemosQuery } from "@/lib/supabase/tripsApi";
 
 export function MemoTab({ tripId }: { tripId: string }) {
-  const { memos, setMemo } = useTripsStore();
-  const [text, setText] = useState(memos[tripId] || "");
+  const { data: memos } = useGetMemosQuery(tripId);
 
-  useEffect(() => {
-    const t = setTimeout(() => setMemo(tripId, text), 400);
-    return () => clearTimeout(t);
-  }, [text, tripId, setMemo]);
+  const [text, setText] = useState(memos?.find((m) => m.id === tripId)?.memo || "");
 
   return (
     <Card>

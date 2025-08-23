@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,20 +7,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Trash2, CheckSquare, FileText } from "lucide-react";
-import { useTripsStore } from "@/components/trips-store";
 import { useAuth } from "./auth/auth-provider";
+import { useGetTripsQuery, useUpdateTripMutation } from "@/lib/supabase/tripsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export function NotesTab({ tripId }: { tripId: string }) {
-  const { trips, updateTrip, loadTrips } = useTripsStore();
   const { user } = useAuth();
-  const trip = useMemo(() => trips.find((t) => t.id === tripId), [trips, tripId]);
+  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
+  const [updateTrip] = useUpdateTripMutation();
+  const trip = useMemo(() => (trips ?? []).find((t) => t.id === tripId), [trips, tripId]);
   const [newItem, setNewItem] = useState("");
-
-  useEffect(() => {
-    if (user) {
-      loadTrips(user.id);
-    }
-  }, [loadTrips, user]);
 
   if (!trip) return null;
 
@@ -42,7 +38,7 @@ export function NotesTab({ tripId }: { tripId: string }) {
       },
     ];
 
-    updateTrip(tripId, { checklist: updatedChecklist });
+    updateTrip({ id: tripId, updates: { checklist: updatedChecklist } });
     setNewItem("");
   };
 
@@ -50,16 +46,16 @@ export function NotesTab({ tripId }: { tripId: string }) {
     const updatedChecklist = checklist.map((item) =>
       item.id === itemId ? { ...item, completed: !item.completed } : item
     );
-    updateTrip(tripId, { checklist: updatedChecklist });
+    updateTrip({ id: tripId, updates: { checklist: updatedChecklist } });
   };
 
   const deleteChecklistItem = (itemId: string) => {
     const updatedChecklist = checklist.filter((item) => item.id !== itemId);
-    updateTrip(tripId, { checklist: updatedChecklist });
+    updateTrip({ id: tripId, updates: { checklist: updatedChecklist } });
   };
 
   const updateMemo = (newMemo: string) => {
-    updateTrip(tripId, { memo: newMemo });
+    updateTrip({ id: tripId, updates: { memo: newMemo } });
   };
 
   return (

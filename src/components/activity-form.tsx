@@ -1,6 +1,8 @@
 import type React from "react";
-
 import { useEffect, useMemo, useState } from "react";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { CalendarDays, RotateCcw, Check } from "lucide-react";
+
 import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,14 +13,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { useTripsStore } from "@/components/trips-store";
 import { CategoryIcon } from "@/components/category-icon";
-import { CalendarDays, RotateCcw, Check } from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import { CATEGORY_PALETTE } from "@/types/categories";
-import { ScrollArea } from "./ui/scroll-area";
 import { useAuth } from "./auth/auth-provider";
+import {
+  useAddActivityMutation,
+  useDeleteActivityMutation,
+  useGetActivitiesQuery,
+  useUpdateActivityMutation,
+} from "@/lib/supabase/tripsApi";
+
+import { CATEGORY_PALETTE } from "@/types/categories";
 
 const CATEGORY_OPTIONS = [
   { id: "none", label: "None" },
@@ -53,11 +61,14 @@ export function ActivityForm({
   open?: boolean;
   onOpenChange?: (o: boolean) => void;
 }) {
-  const { activities, addActivity, updateActivity, deleteActivity } = useTripsStore();
+  const { data: activities } = useGetActivitiesQuery(tripId ?? skipToken);
+  const [addActivity] = useAddActivityMutation();
+  const [updateActivity] = useUpdateActivityMutation();
+  const [deleteActivity] = useDeleteActivityMutation();
   const { user } = useAuth();
   const isEdit = !!activityId;
   const activity = useMemo(
-    () => activities.find((a) => a.id === activityId),
+    () => activities?.find((a) => a.id === activityId),
     [activities, activityId]
   );
 
@@ -135,21 +146,24 @@ export function ActivityForm({
   const onSave = () => {
     if (!canSave) return;
     if (isEdit && activity) {
-      updateActivity(activity.id, {
-        date: form.date,
-        name: form.title.trim(),
-        category: form.category,
-        startTime: form.startTime || undefined,
-        endTime: form.endTime || undefined,
-        address: form.address || undefined,
-        url: form.url || undefined,
-        memo: form.memo || undefined,
-        cost: form.cost ? Number(form.cost) : undefined,
-        currency: form.currency || undefined,
-        image: form.image || undefined,
-        timezone: form.timezone,
-        userId: user?.id,
-        tripId: activity.tripId,
+      updateActivity({
+        id: activity.id,
+        updates: {
+          date: form.date,
+          name: form.title.trim(),
+          category: form.category,
+          startTime: form.startTime || undefined,
+          endTime: form.endTime || undefined,
+          address: form.address || undefined,
+          url: form.url || undefined,
+          memo: form.memo || undefined,
+          cost: form.cost ? Number(form.cost) : undefined,
+          currency: form.currency || undefined,
+          image: form.image || undefined,
+          timezone: form.timezone,
+          userId: user?.id,
+          tripId: activity.tripId,
+        },
       });
     } else if (tripId) {
       addActivity({

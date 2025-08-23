@@ -1,20 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Plus } from "lucide-react";
+import { useMemo, useState } from "react";
 import { CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ActivityForm } from "@/components/activity-form";
-import { useTripsStore } from "@/components/trips-store";
 import { cn } from "@/lib/utils";
 import { CategoryIcon } from "@/components/category-icon";
 import { CATEGORY_PALETTE, type categoryPaletteKeys } from "@/types/categories";
+import { useGetActivitiesQuery, useGetActivityQuery } from "@/lib/supabase/tripsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { Plus } from "lucide-react";
 
 export function ScheduleTab({
   tripId,
@@ -27,13 +20,6 @@ export function ScheduleTab({
 }) {
   const days = useMemo(() => expandDays(startDate, endDate), [startDate, endDate]);
   const [openForDate, setOpenForDate] = useState<string | null>(null);
-  const { loadActivities } = useTripsStore();
-
-  useEffect(() => {
-    if (tripId) {
-      loadActivities(tripId);
-    }
-  }, [tripId, loadActivities]);
 
   return (
     <div className="grid gap-3">
@@ -74,15 +60,13 @@ function DayCard({
   timezone: string;
   onAdd: () => void;
 }) {
-  const { activities, reorderActivities } = useTripsStore();
+  const { data: activities } = useGetActivitiesQuery(tripId ?? skipToken);
 
   const list = useMemo(() => {
-    return activities
+    return (activities ?? [])
       .filter((a) => a.tripId === tripId && sameDay(a.date, dateIso))
       .sort((a, b) => a.order - b.order || (a.startTime || "").localeCompare(b.startTime || ""));
   }, [activities, tripId, dateIso]);
-
-  const sensors = useSensors(useSensor(PointerSensor));
 
   function sameDay(date1: string, date2: string): boolean {
     const d1 = new Date(date1);
@@ -99,15 +83,6 @@ function DayCard({
     );
   }
 
-  function onDragEnd(e: DragEndEvent) {
-    const { active, over } = e;
-    if (!over || active.id === over.id) return;
-    const oldIndex = list.findIndex((x) => x.id === active.id);
-    const newIndex = list.findIndex((x) => x.id === over.id);
-    const newOrder = arrayMove(list, oldIndex, newIndex).map((x) => x.id);
-    reorderActivities(tripId, dateIso, newOrder);
-  }
-
   return (
     <div className="rounded-2xl border bg-card">
       <div className="flex items-center justify-between px-4 pt-3">
@@ -117,15 +92,11 @@ function DayCard({
       <div className="px-4 text-sm text-muted-foreground">{dateLabel}</div>
 
       <CardContent className="grid gap-2 pt-3">
-        <DndContext sensors={sensors} onDragEnd={onDragEnd}>
-          <SortableContext items={list.map((a) => a.id)} strategy={verticalListSortingStrategy}>
-            {list.length === 0 ? (
-              <div className="text-sm text-muted-foreground px-2 pb-2">No activities yet.</div>
-            ) : (
-              list.map((a) => <ActivityRow key={a.id} id={a.id} activityId={a.id} />)
-            )}
-          </SortableContext>
-        </DndContext>
+        {list.length === 0 ? (
+          <div className="text-sm text-muted-foreground px-2 pb-2">No activities yet.</div>
+        ) : (
+          list.map((a) => <ActivityRow key={a.id} activityId={a.id} />)
+        )}
 
         <div className="px-4 pb-4">
           <Button onClick={onAdd} className="bg-teal-600 hover:bg-teal-500 text-white">
@@ -138,54 +109,32 @@ function DayCard({
   );
 }
 
-function ActivityRow({ id, activityId }: { id: string; activityId: string }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-    id,
-  });
-  const { activities } = useTripsStore();
-  const a = activities.find((x) => x.id === activityId);
-  if (!a) return null;
+function ActivityRow({ activityId }: { activityId: string }) {
+  const { data: activity } = useGetActivityQuery(activityId ?? skipToken);
+  if (!activity) return null;
 
-  const category = (a.category as categoryPaletteKeys) || "none";
+  const category = (activity.category as categoryPaletteKeys) || "none";
   const colorClass = CATEGORY_PALETTE[category] || "text-muted-foreground";
 
   return (
-    <div
-      ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={cn(
-        "mx-4 rounded-xl bg-muted/30 border p-3",
-        isDragging && "ring-2 ring-teal-500/40"
-      )}
-    >
+    <div className="mx-4 rounded-xl bg-muted/30 border p-3">
       <div className="flex items-start gap-3 h-full">
-        <button
-          aria-label="Drag"
-          className="cursor-grab active:cursor-grabbing text-muted-foreground flex flex-col justify-center h-full"
-          {...attributes}
-          {...listeners}
-        >
-          <GripVertical className="h-4 w-4" />
-        </button>
-
         <div className={cn("mt-0.5 shrink-0 rounded-full p-2", colorClass)}>
           <CategoryIcon category={category} className="h-4 w-4" />
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2">
-            <div className="font-medium truncate">{a.name || "Untitled activity"}</div>
-            <div className="text-teal-500 text-sm tabular-nums">
-              {a.startTime || "All day"}
-              {a.endTime ? (
-                <span className="text-xs text-muted-foreground block leading-none">
-                  -{a.endTime}
-                </span>
-              ) : null}
+        <div className="flex-1 min-w-0 h-full">
+          <div className="flex items-center justify-between gap-2 h-full">
+            <div className="font-medium truncate">{activity.name || "Untitled activity"}</div>
+            <div className=" text-xs text-muted-foreground tabular-nums flex flex-col justify-center h-full">
+              <span className="flex">
+                {activity.startTime || "All day"}
+                {activity.endTime ? `-${activity.endTime}` : null}
+              </span>
             </div>
           </div>
           <div className="text-xs text-muted-foreground truncate">
-            {a.address || a.url || a.memo || ""}
+            {activity.address || activity.url || activity.memo || ""}
           </div>
         </div>
       </div>

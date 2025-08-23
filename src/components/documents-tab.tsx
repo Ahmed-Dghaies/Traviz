@@ -4,11 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Upload, Trash2, Eye } from "lucide-react";
-import { useTripsStore } from "@/components/trips-store";
+import {
+  useAddDocumentMutation,
+  useDeleteDocumentMutation,
+  useGetDocumentsQuery,
+} from "@/lib/supabase/tripsApi";
 
 export function DocumentsTab({ tripId }: { tripId: string }) {
-  const { documents, addDocument, deleteDocument } = useTripsStore();
-  const tripDocuments = documents.filter((doc) => doc.tripId === tripId);
+  const { data: documents } = useGetDocumentsQuery(tripId);
+  const [addDocument] = useAddDocumentMutation();
+  const [deleteDocument] = useDeleteDocumentMutation();
+  const tripDocuments = (documents ?? []).filter((doc) => doc.tripId === tripId);
   const [uploading, setUploading] = useState(false);
 
   const handleFileUpload = async (file: File) => {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Plus, Search, SortAsc, Users, ArrowRight, AlertTriangle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useTripsStore } from "@/components/trips-store";
-import { NewTripDialog } from "@/components/new-trip-dialog";
 import { BottomNav } from "@/components/bottom-nav";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { UserMenu } from "@/components/auth/user-menu";
@@ -23,27 +21,23 @@ import { useAuth } from "@/components/auth/auth-provider";
 import { Link } from "react-router";
 
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
+import { useGetPlanQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
+import NewTripDialog from "@/components/NewTripDialog";
 
 function HomePage() {
   const { user } = useAuth();
-  const { trips, plan, setCurrentUser, loadTrips } = useTripsStore();
+  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
+  const { data: plan } = useGetPlanQuery(user?.id ?? skipToken);
   const [seg, setSeg] = useState<"upcoming" | "past">("upcoming");
   const [sort, setSort] = useState<"date" | "name">("date");
   const [q, setQ] = useState("");
-
-  useEffect(() => {
-    if (user) {
-      console.log("loadTrips", user.id);
-      loadTrips(user.id);
-      setCurrentUser(user.id);
-    }
-  }, [user, setCurrentUser, loadTrips]);
 
   const filtered = useMemo(() => {
     const now = new Date();
     // Filter trips by current user
 
-    const bySection = trips.filter((t) => {
+    const bySection = (trips ?? []).filter((t) => {
       const end = new Date(t.endDate);
       return seg === "upcoming" ? end >= now : end < now;
     });
@@ -59,9 +53,9 @@ function HomePage() {
     return sorted;
   }, [trips, seg, q, sort]);
 
-  const userTripsCount = trips.filter((t) => t.userId === user?.id).length;
-  const remaining = Math.max(0, (plan.tripLimit ?? Number.POSITIVE_INFINITY) - userTripsCount);
-  const atLimit = plan.tier === "free" && remaining <= 0;
+  const userTripsCount = (trips ?? []).filter((t) => t.userId === user?.id).length;
+  const remaining = Math.max(0, (plan?.tripLimit ?? Number.POSITIVE_INFINITY) - userTripsCount);
+  const atLimit = plan?.tier === "free" && remaining <= 0;
 
   return (
     <main className="min-h-screen bg-background">
@@ -76,12 +70,12 @@ function HomePage() {
           </div>
         </header>
 
-        {plan.tier === "free" && (
+        {plan?.tier === "free" && (
           <Alert className="mb-4">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Free Plan</AlertTitle>
             <AlertDescription>
-              You can create up to {plan.tripLimit} trips. Remaining: {remaining}.{" "}
+              You can create up to {plan?.tripLimit} trips. Remaining: {remaining}.{" "}
               <Link to="/store" className="underline underline-offset-4">
                 Upgrade for unlimited trips and offline mode.
               </Link>
@@ -100,7 +94,7 @@ function HomePage() {
             />
           </div>
           <Select value={sort} onValueChange={(v) => setSort(v as "date" | "name")}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[140px]">
               <SortAsc className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Sort" />
             </SelectTrigger>

@@ -1,23 +1,29 @@
 import { useEffect } from "react";
-import { useTripsStore } from "@/components/trips-store";
 import { useNavigate, useParams } from "react-router";
+import {
+  useGetActivitiesQuery,
+  useGetTripQuery,
+  useImportSharedMutation,
+} from "@/lib/supabase/tripsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 export default function ImportHandler() {
   const params = useParams();
   const navigate = useNavigate();
-  const { importShared } = useTripsStore();
+  const [importShared] = useImportSharedMutation();
+  const tripId = params.tripId;
+  const { data: trip } = useGetTripQuery(tripId ?? skipToken);
+  const { data: activities } = useGetActivitiesQuery(tripId ?? skipToken);
 
   useEffect(() => {
-    const payload = params.import;
-    if (payload) {
-      const id = importShared(payload);
-      const next = id ? `/itinerary/${id}` : "/";
-      const url = new URL(window.location.href);
-      url.searchParams.delete("import");
-      window.history.replaceState({}, "", url.toString());
-      navigate(next);
+    if (trip && activities) {
+      importShared({ trip, activities })
+        .unwrap()
+        .then((tripId) => {
+          navigate(`/trip/${tripId}`);
+        });
     }
-  }, [params, importShared, navigate]);
+  }, [trip, activities, importShared, navigate]);
 
   return null;
 }

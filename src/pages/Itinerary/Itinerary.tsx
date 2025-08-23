@@ -25,7 +25,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useTripsStore } from "@/components/trips-store";
 import { ScheduleTab } from "@/components/schedule-tab";
 import { NotesTab } from "@/components/notes-tab";
 import { DocumentsTab } from "@/components/documents-tab";
@@ -35,21 +34,24 @@ import { Link, useNavigate, useParams } from "react-router";
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { useAuth } from "@/components/auth/auth-provider";
+import {
+  useDeleteTripMutation,
+  useGetTripsQuery,
+  useUpdateTripMutation,
+} from "@/lib/supabase/tripsApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 function ItineraryPage() {
   const params = useParams();
   const navigate = useNavigate();
-  const { trips, updateTrip, deleteTrip, exportShareLink, loadTrips } = useTripsStore();
   const { user } = useAuth();
+  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
+  const [updateTrip] = useUpdateTripMutation();
+  const [deleteTrip] = useDeleteTripMutation();
+
   const [tab, setTab] = useState("schedule");
 
-  const trip = useMemo(() => trips.find((t) => t.id == params.id), [trips, params.id]);
-
-  useEffect(() => {
-    if (user) {
-      loadTrips(user.id);
-    }
-  }, [loadTrips, user]);
+  const trip = useMemo(() => (trips ?? []).find((t) => t.id == params.id), [trips, params.id]);
 
   useEffect(() => {
     if (!trip) return;
@@ -73,9 +75,8 @@ function ItineraryPage() {
   }
 
   const onShare = async () => {
-    const url = exportShareLink(trip.id);
+    const url = `/shared-trip/?tripId=${trip.id}`;
     await navigator.clipboard.writeText(url);
-    alert("Share link copied");
   };
 
   return (
@@ -192,7 +193,9 @@ function ItineraryPage() {
                   <label className="text-sm font-medium">Destination</label>
                   <Input
                     value={trip.destination}
-                    onChange={(e) => updateTrip(trip.id, { destination: e.target.value })}
+                    onChange={(e) =>
+                      updateTrip({ id: trip.id, updates: { destination: e.target.value } })
+                    }
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -202,7 +205,10 @@ function ItineraryPage() {
                       type="date"
                       value={toInputDate(trip.startDate)}
                       onChange={(e) =>
-                        updateTrip(trip.id, { startDate: new Date(e.target.value).toISOString() })
+                        updateTrip({
+                          id: trip.id,
+                          updates: { startDate: new Date(e.target.value).toISOString() },
+                        })
                       }
                     />
                   </div>
@@ -212,7 +218,10 @@ function ItineraryPage() {
                       type="date"
                       value={toInputDate(trip.endDate)}
                       onChange={(e) =>
-                        updateTrip(trip.id, { endDate: new Date(e.target.value).toISOString() })
+                        updateTrip({
+                          id: trip.id,
+                          updates: { endDate: new Date(e.target.value).toISOString() },
+                        })
                       }
                     />
                   </div>
@@ -224,7 +233,10 @@ function ItineraryPage() {
                     min={1}
                     value={trip.people}
                     onChange={(e) =>
-                      updateTrip(trip.id, { people: Math.max(1, Number(e.target.value || 1)) })
+                      updateTrip({
+                        id: trip.id,
+                        updates: { people: Math.max(1, Number(e.target.value || 1)) },
+                      })
                     }
                   />
                 </div>
@@ -234,7 +246,9 @@ function ItineraryPage() {
                     rows={4}
                     placeholder="Trip notes or description"
                     value={trip.notes || ""}
-                    onChange={(e) => updateTrip(trip.id, { notes: e.target.value })}
+                    onChange={(e) =>
+                      updateTrip({ id: trip.id, updates: { notes: e.target.value } })
+                    }
                   />
                 </div>
               </CardContent>

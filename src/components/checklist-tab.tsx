@@ -4,11 +4,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useTripsStore } from "@/components/trips-store";
+import {
+  useAddChecklistItemMutation,
+  useDeleteChecklistItemMutation,
+  useGetChecklistQuery,
+  useToggleChecklistItemMutation,
+} from "@/lib/supabase/tripsApi";
 
 export function ChecklistTab({ tripId }: { tripId: string }) {
-  const { checklist, addChecklistItem, toggleChecklistItem, deleteChecklistItem } = useTripsStore();
-  const items = useMemo(() => checklist.filter((c) => c.tripId === tripId), [checklist, tripId]);
+  const { data: checklist } = useGetChecklistQuery(tripId);
+  const [addChecklistItem] = useAddChecklistItemMutation();
+  const [deleteChecklistItem] = useDeleteChecklistItemMutation();
+  const [toggleChecklistItem] = useToggleChecklistItemMutation();
+  const items = useMemo(
+    () => (checklist ?? []).filter((c) => c.tripId === tripId),
+    [checklist, tripId]
+  );
   const done = items.filter((i) => i.completed).length;
   const [text, setText] = useState("");
   return (
@@ -24,7 +35,7 @@ export function ChecklistTab({ tripId }: { tripId: string }) {
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && text.trim()) {
-                addChecklistItem(tripId, text.trim());
+                addChecklistItem({ tripId, text: text.trim() });
                 setText("");
               }
             }}
@@ -32,7 +43,7 @@ export function ChecklistTab({ tripId }: { tripId: string }) {
           <Button
             onClick={() => {
               if (!text.trim()) return;
-              addChecklistItem(tripId, text.trim());
+              addChecklistItem({ tripId, text: text.trim() });
               setText("");
             }}
           >
@@ -54,7 +65,7 @@ export function ChecklistTab({ tripId }: { tripId: string }) {
               <div key={i.id} className="flex items-center gap-2">
                 <button
                   aria-label={i.completed ? "Mark as incomplete" : "Mark as done"}
-                  onClick={() => toggleChecklistItem(i.id, !i.completed)}
+                  onClick={() => toggleChecklistItem({ id: i.id, completed: !i.completed })}
                   className="h-5 w-5 border rounded-sm flex items-center justify-center"
                 >
                   {i.completed && <Check className="h-4 w-4" />}

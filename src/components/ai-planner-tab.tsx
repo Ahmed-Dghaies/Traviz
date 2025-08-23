@@ -7,7 +7,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Sparkles, RefreshCw, AlertCircle, ExternalLink } from "lucide-react";
-import { useTripsStore } from "@/components/trips-store";
+import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
+import { useAuth } from "./auth/auth-provider";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 type PlannerState = "questions" | "generating" | "results" | "setup";
 
@@ -21,8 +23,9 @@ interface PlannerAnswers {
 }
 
 export function AIPlannerTab({ tripId }: { tripId: string }) {
-  const { trips } = useTripsStore();
-  const trip = trips.find((t) => t.id === tripId);
+  const { user } = useAuth();
+  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
+  const trip = (trips ?? []).find((t) => t.id === tripId);
 
   const [state, setState] = useState<PlannerState>("questions");
   const [answers, setAnswers] = useState<PlannerAnswers>({
@@ -54,7 +57,9 @@ export function AIPlannerTab({ tripId }: { tripId: string }) {
           (1000 * 60 * 60 * 24)
       ) + 1;
 
-    return `Create a detailed ${duration}-day travel itinerary for ${trip.destination} for ${trip.people} ${trip.people === 1 ? "person" : "people"}.
+    return `Create a detailed ${duration}-day travel itinerary for ${trip.destination} for ${
+      trip.people
+    } ${trip.people === 1 ? "person" : "people"}.
 
 Trip Details:
 - Destination: ${trip.destination}
