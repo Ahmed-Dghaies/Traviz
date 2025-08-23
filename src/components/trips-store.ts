@@ -112,6 +112,8 @@ export const useTripsStore = create<TripsState>((set, get) => ({
 
     const formattedTrips = transformKeys(data ?? [], camelCase) as Trip[];
 
+    console.log("formattedTrips", formattedTrips);
+
     set({
       trips: formattedTrips,
     });

@@ -77,7 +77,6 @@ function DayCard({
   const { activities, reorderActivities } = useTripsStore();
 
   const list = useMemo(() => {
-    console.log(activities);
     return activities
       .filter((a) => a.tripId === tripId && sameDay(a.date, dateIso))
       .sort((a, b) => a.order - b.order || (a.startTime || "").localeCompare(b.startTime || ""));

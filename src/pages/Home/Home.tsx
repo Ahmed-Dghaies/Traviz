@@ -33,13 +33,13 @@ function HomePage() {
 
   useEffect(() => {
     if (user) {
+      console.log("loadTrips", user.id);
       loadTrips(user.id);
       setCurrentUser(user.id);
     }
   }, [user, setCurrentUser, loadTrips]);
 
   const filtered = useMemo(() => {
-    console.log("filtered", trips);
     const now = new Date();
     // Filter trips by current user
 
