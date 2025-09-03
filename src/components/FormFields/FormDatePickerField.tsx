@@ -55,7 +55,6 @@ const FormDatePickerField = <T extends FieldValues, TT extends FieldValues>({
                     setOpen(false);
                   }
                 }}
-                disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
                 captionLayout="dropdown"
               />
             </PopoverContent>

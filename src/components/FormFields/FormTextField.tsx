@@ -16,22 +16,27 @@ interface TextFieldProps extends React.ComponentProps<"input"> {
   label?: string;
   handleChange?: (value: string) => void;
   handleBlur?: () => void;
+  icon?: React.ReactNode;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ value, label, handleChange, handleBlur, ...props }, ref) => {
+  ({ value, label, handleChange, handleBlur, icon, ...props }, ref) => {
     return (
       <>
         {label && <Label>{label}</Label>}
-        <Input
-          ref={ref}
-          aria-label={label}
-          autoComplete="off"
-          value={value || ""}
-          onChange={(e) => handleChange?.(e.target.value)}
-          onBlur={handleBlur}
-          {...props}
-        />
+        <div className="relative">
+          {icon ?? null}
+          <Input
+            ref={ref}
+            aria-label={label}
+            autoComplete="off"
+            className={icon ? "pl-10" : ""}
+            value={value || ""}
+            onChange={(e) => handleChange?.(e.target.value)}
+            onBlur={handleBlur}
+            {...props}
+          />
+        </div>
       </>
     );
   }
@@ -39,7 +44,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
 interface FormTextFieldProps<T extends FieldValues, TT extends FieldValues>
   extends Omit<TextFieldProps, "value" | "onChange"> {
-  control?: Control<T, unknown, TT extends T ? TT : T>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control?: Control<T, unknown, TT extends T ? TT : any>;
   name: Path<T>;
 }
 

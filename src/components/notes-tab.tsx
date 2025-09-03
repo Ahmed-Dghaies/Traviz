@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, Trash2, CheckSquare, FileText } from "lucide-react";
-import { useAuth } from "./auth/auth-provider";
+import { useAuth } from "./auth/components/AuthProvider";
 import { useGetTripsQuery, useUpdateTripMutation } from "@/lib/supabase/tripsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 

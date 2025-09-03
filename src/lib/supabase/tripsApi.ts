@@ -504,27 +504,21 @@ export const tripsApi = createApi({
       invalidatesTags: (_result, _error, { tripId }) => [{ type: "Memo", id: tripId }],
     }),
 
-    //Plan endpoints
-    getPlan: builder.query<Plan, string>({
-      queryFn: async (tripId) => {
+    // Plan endpoints
+    getPlans: builder.query<Plan[], void>({
+      queryFn: async () => {
         try {
-          const { data, error } = await supabase
-            .from("plans")
-            .select("*")
-            .eq("trip_id", tripId)
-            .single();
-
+          const { data, error } = await supabase.from("plans").select("*");
           if (error) {
             return handleSupabaseError(error);
           }
-
-          const formattedPlan = transformKeys(data ?? {}, camelCase) as Plan;
-          return { data: formattedPlan };
+          const formattedPlans = transformKeys(data ?? [], camelCase) as Plan[];
+          return { data: formattedPlans };
         } catch (error: unknown) {
           return handleSupabaseError(error);
         }
       },
-      providesTags: (_result, _error, planId) => [{ type: "Plan", id: planId }],
+      providesTags: ["Plan"],
     }),
   }),
 });
@@ -552,5 +546,5 @@ export const {
   useGetMemoQuery,
   useAddMemoMutation,
   useUpdateMemoMutation,
-  useGetPlanQuery,
+  useGetPlansQuery,
 } = tripsApi;

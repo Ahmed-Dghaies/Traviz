@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, Crown, Zap } from "lucide-react";
+import { ArrowLeft, Check, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,35 +11,23 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { BottomNav } from "@/components/bottom-nav";
 import { Link } from "react-router";
-import { ProtectedRoute } from "@/components/auth/protected-route";
-import { useGetPlanQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
-import { useAuth } from "@/components/auth/auth-provider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { useGetPlansQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
+import { useAuth } from "@/components/auth/components/AuthProvider";
+import { useMemo } from "react";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 function StorePage() {
   const { user } = useAuth();
-  const { data: plan } = useGetPlanQuery(user?.id ?? skipToken);
+  const { data: plans } = useGetPlansQuery();
   const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
 
-  const features = {
-    free: [
-      "Up to 3 trips",
-      "Basic itinerary planning",
-      "Photo uploads",
-      "Notes and checklists",
-      "Document storage (50MB)",
-    ],
-    premium: [
-      "Unlimited trips",
-      "Offline mode",
-      "AI travel planner",
-      "Advanced collaboration",
-      "Priority support",
-      "Document storage (5GB)",
-      "Export to PDF",
-      "Custom themes",
-    ],
-  };
+  const currentPlan = useMemo(
+    () => plans?.find((plan) => plan.id === user?.user_metadata?.plan),
+    [user, plans]
+  );
+
+  console.log(user);
 
   return (
     <main className="min-h-screen bg-background">
@@ -53,97 +41,67 @@ function StorePage() {
           <h1 className="text-xl font-semibold">Store</h1>
         </header>
 
-        {plan && trips ? (
+        {plans && trips ? (
           <div className="space-y-4">
             {/* Current Plan */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Crown className="h-4 w-4 text-amber-500" />
-                  Current Plan
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium capitalize">{plan.tier} Plan</div>
-                    <div className="text-sm text-muted-foreground">
-                      {plan.tier === "free"
-                        ? `${trips.length}/${plan.tripLimit} trips used`
-                        : "Unlimited trips"}
+            {currentPlan && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Crown className="h-4 w-4 text-amber-500" />
+                    Current Plan
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium capitalize">{currentPlan.name} Plan</div>
+                      <div className="text-sm text-muted-foreground">
+                        {currentPlan.name === "Free"
+                          ? `${trips.length}/2 trips used`
+                          : "Unlimited trips"}
+                      </div>
                     </div>
+                    <Badge
+                      variant={
+                        currentPlan.name === "Premium" || currentPlan.name === "Traveler"
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
+                      {currentPlan.name}
+                    </Badge>
                   </div>
-                  <Badge variant={plan.tier === "premium" ? "default" : "secondary"}>
-                    {plan.tier === "premium" ? "Premium" : "Free"}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
-            {/* Free Plan */}
-            <Card className={plan.tier === "free" ? "ring-2 ring-teal-500" : ""}>
-              <CardHeader>
-                <CardTitle className="text-base">Free Plan</CardTitle>
-                <CardDescription>Perfect for getting started</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold mb-4">$0</div>
-                <ul className="space-y-2">
-                  {features.free.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-green-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                {plan.tier === "free" ? (
-                  <Button disabled className="w-full">
-                    Current Plan
-                  </Button>
-                ) : (
-                  <Button variant="outline" className="w-full bg-transparent">
-                    Downgrade
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-
-            {/* Premium Plan */}
-            <Card className={plan.tier === "premium" ? "ring-2 ring-teal-500" : ""}>
-              <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-amber-500" />
-                  Premium Plan
-                </CardTitle>
-                <CardDescription>Unlock all features and unlimited trips</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold mb-4">
-                  $9.99<span className="text-sm font-normal text-muted-foreground">/month</span>
-                </div>
-                <ul className="space-y-2">
-                  {features.premium.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-green-500" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                {plan.tier === "premium" ? (
-                  <Button disabled className="w-full">
-                    Current Plan
-                  </Button>
-                ) : (
-                  <Button className="w-full bg-teal-600 hover:bg-teal-500">
-                    Upgrade to Premium
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+            {plans.map((plan) => (
+              <Card className={plan.name === "Free" ? "ring-2 ring-teal-500" : ""}>
+                <CardHeader>
+                  <CardTitle className="text-base">{plan.name} Plan</CardTitle>
+                  <CardDescription>{plan.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold mb-4">$0</div>
+                  <ul className="space-y-2">
+                    {plan.features.map((feature: string) => (
+                      <li key={feature} className="flex items-center gap-2 text-sm">
+                        <Check className="h-4 w-4 text-green-500" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  {currentPlan?.name !== plan.name && (
+                    <Button className="w-full bg-teal-600 hover:bg-teal-500">
+                      Switch to {plan.name}
+                    </Button>
+                  )}
+                </CardFooter>
+              </Card>
+            ))}
 
             <div className="text-center text-sm text-muted-foreground">
               <p>All plans include secure cloud sync and cross-device access.</p>

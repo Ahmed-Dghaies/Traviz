@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CategoryIcon } from "@/components/category-icon";
 
 import { cn } from "@/lib/utils";
-import { useAuth } from "./auth/auth-provider";
+import { useAuth } from "./auth/components/AuthProvider";
 import {
   useAddActivityMutation,
   useDeleteActivityMutation,

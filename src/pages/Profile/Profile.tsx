@@ -8,15 +8,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/components/auth/auth-provider";
-import { ProtectedRoute } from "@/components/auth/protected-route";
+import { useAuth } from "@/components/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
 import { Link } from "react-router";
 import { createSupabaseClient } from "@/lib/supabase/client";
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 function ProfilePage() {
   const { user } = useAuth();
+  console.log(user);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
   const [profile, setProfile] = useState({
     fullName: user?.user_metadata?.full_name || "",
     email: user?.email || "",
@@ -159,7 +163,7 @@ function ProfilePage() {
             <CardContent>
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div>
-                  <div className="text-2xl font-bold text-teal-600">0</div>
+                  <div className="text-2xl font-bold text-teal-600">{trips?.length ?? 0}</div>
                   <div className="text-sm text-muted-foreground">Total Trips</div>
                 </div>
                 <div>

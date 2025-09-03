@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User, LogOut, Crown } from "lucide-react";
-import { useAuth } from "./auth-provider";
+import { useAuth } from "./AuthProvider";
 import { Link } from "react-router";
 
 export function UserMenu() {

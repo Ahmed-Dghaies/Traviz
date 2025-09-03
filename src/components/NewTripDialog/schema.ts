@@ -1,12 +1,13 @@
 import { type } from "arktype";
 
 export const TripSchema = type({
-  destination: "string>3",
+  title: "string>3",
+  countries: "string>0[]",
   startDate: "string.date",
   endDate: "string.date",
   people: "string.numeric.parse | number",
   thumbnail: "string|null?",
-  notes: "string?",
+  description: "string?",
 });
 
 export type TripSchemaTypeIn = typeof TripSchema.inferIn;

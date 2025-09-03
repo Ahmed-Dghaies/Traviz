@@ -1,12 +1,12 @@
 export interface Trip {
   id: string;
   userId?: string;
-  destination: string;
+  description?: string;
+  countries: string[];
   startDate: string;
   endDate: string;
   people: number;
   thumbnail?: string | null;
-  notes?: string;
   checklist?: ChecklistItem[];
   memo?: string;
 }
@@ -54,6 +54,9 @@ export interface Document {
 }
 
 export interface Plan {
-  tier: "free" | "premium";
-  tripLimit?: number;
+  id: string;
+  name: "Free" | "Premium" | "Traveler";
+  description: string;
+  price: number;
+  features: string[];
 }

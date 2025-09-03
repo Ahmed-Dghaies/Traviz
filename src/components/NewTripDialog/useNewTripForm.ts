@@ -8,12 +8,13 @@ export const useNewTripForm = (defaultValues?: TripSchemaTypeIn) => {
     mode: "onChange",
     reValidateMode: "onChange",
     defaultValues: defaultValues || {
-      destination: "",
+      title: "",
+      countries: [],
       startDate: undefined,
       endDate: undefined,
       people: 1,
       thumbnail: null,
-      notes: "",
+      description: "",
     },
   });
 

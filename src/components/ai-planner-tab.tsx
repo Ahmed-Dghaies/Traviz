@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Sparkles, RefreshCw, AlertCircle, ExternalLink } from "lucide-react";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
-import { useAuth } from "./auth/auth-provider";
+import { useAuth } from "./auth/components/AuthProvider";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 type PlannerState = "questions" | "generating" | "results" | "setup";

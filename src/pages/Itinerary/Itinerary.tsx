@@ -32,8 +32,8 @@ import { AIPlannerTab } from "@/components/ai-planner-tab";
 import { Link, useNavigate, useParams } from "react-router";
 
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
-import { ProtectedRoute } from "@/components/auth/protected-route";
-import { useAuth } from "@/components/auth/auth-provider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { useAuth } from "@/components/auth/components/AuthProvider";
 import {
   useDeleteTripMutation,
   useGetTripsQuery,

@@ -15,23 +15,28 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BottomNav } from "@/components/bottom-nav";
-import { ProtectedRoute } from "@/components/auth/protected-route";
-import { UserMenu } from "@/components/auth/user-menu";
-import { useAuth } from "@/components/auth/auth-provider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { UserMenu } from "@/components/auth/components/UserMenu";
+import { useAuth } from "@/components/auth/components/AuthProvider";
 import { Link } from "react-router";
 
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
-import { useGetPlanQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
+import { useGetPlansQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 import NewTripDialog from "@/components/NewTripDialog";
 
 function HomePage() {
   const { user } = useAuth();
   const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
-  const { data: plan } = useGetPlanQuery(user?.id ?? skipToken);
+  const { data: plans } = useGetPlansQuery();
   const [seg, setSeg] = useState<"upcoming" | "past">("upcoming");
   const [sort, setSort] = useState<"date" | "name">("date");
   const [q, setQ] = useState("");
+
+  const currentPlan = useMemo(
+    () => plans?.find((plan) => plan.id === user?.user_metadata?.plan),
+    [user, plans]
+  );
 
   const filtered = useMemo(() => {
     const now = new Date();
@@ -54,8 +59,11 @@ function HomePage() {
   }, [trips, seg, q, sort]);
 
   const userTripsCount = (trips ?? []).filter((t) => t.userId === user?.id).length;
-  const remaining = Math.max(0, (plan?.tripLimit ?? Number.POSITIVE_INFINITY) - userTripsCount);
-  const atLimit = plan?.tier === "free" && remaining <= 0;
+  const remaining = Math.max(
+    0,
+    (currentPlan?.name === "Free" ? 2 : Number.POSITIVE_INFINITY) - userTripsCount
+  );
+  const atLimit = currentPlan?.name === "Free" && remaining <= 0;
 
   return (
     <main className="min-h-screen bg-background">
@@ -70,12 +78,12 @@ function HomePage() {
           </div>
         </header>
 
-        {plan?.tier === "free" && (
+        {currentPlan?.name === "Free" && (
           <Alert className="mb-4">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Free Plan</AlertTitle>
             <AlertDescription>
-              You can create up to {plan?.tripLimit} trips. Remaining: {remaining}.{" "}
+              You can create up to 2 trips. Remaining: {remaining}.{" "}
               <Link to="/store" className="underline underline-offset-4">
                 Upgrade for unlimited trips and offline mode.
               </Link>
