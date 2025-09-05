@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "../auth/components/AuthProvider";
 import { useAddTripMutation } from "@/lib/supabase/tripsApi";
-import type { Trip } from "@/types/trips";
 import TripForm from "../TripForm";
+import type { TripSchemaTypeOut } from "./schema";
 
 const NewTripDialog = ({
   trigger,
@@ -25,12 +25,12 @@ const NewTripDialog = ({
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const onSubmit = async (data: Omit<Trip, "id">) => {
+  const onSubmit = async (data: TripSchemaTypeOut) => {
     try {
       await addTrip({
         ...data,
         countries: data.countries,
-        userId: user?.id,
+        userId: user?.id ?? "",
       });
       setOpen(false);
     } catch (error) {

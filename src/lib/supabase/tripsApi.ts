@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery, type FetchBaseQueryError } from "@reduxjs/to
 import { createSupabaseClient, transformKeys } from "./client";
 import { camelCase, snakeCase } from "lodash";
 import type { Activity, ChecklistItem, Document, Memo, Plan, Trip } from "@/types/trips";
+import type { TripSchemaTypeOut } from "@/components/NewTripDialog/schema";
 
 const supabase = createSupabaseClient();
 
@@ -65,7 +66,7 @@ export const tripsApi = createApi({
       providesTags: [],
     }),
 
-    addTrip: builder.mutation<{ id: string }, Omit<Trip, "id">>({
+    addTrip: builder.mutation<{ id: string }, TripSchemaTypeOut>({
       queryFn: async (trip) => {
         try {
           const tripToAdd = transformKeys(trip, snakeCase);
@@ -387,7 +388,7 @@ export const tripsApi = createApi({
     toggleChecklistItem: builder.mutation<void, { id: string; completed: boolean }>({
       queryFn: async ({ id, completed }) => {
         try {
-          const { error } = await supabase.from("checklist").update({ completed }).eq("id", id);
+          const { error } = await supabase.from("checklist").update({ id, completed }).eq("id", id);
 
           if (error) {
             return handleSupabaseError(error);

@@ -17,7 +17,6 @@ import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 function ProfilePage() {
   const { user } = useAuth();
-  console.log(user);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);

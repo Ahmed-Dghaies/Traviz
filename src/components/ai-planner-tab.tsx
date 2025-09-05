@@ -57,12 +57,14 @@ export function AIPlannerTab({ tripId }: { tripId: string }) {
           (1000 * 60 * 60 * 24)
       ) + 1;
 
-    return `Create a detailed ${duration}-day travel itinerary for ${trip.destination} for ${
+    return `Create a detailed ${duration}-day travel itinerary for ${trip.title} for ${
       trip.people
     } ${trip.people === 1 ? "person" : "people"}.
 
 Trip Details:
-- Destination: ${trip.destination}
+- Title: ${trip.title}
+- Countries: ${trip.countries.join(", ")}
+- Cities: ${trip.cities.join(", ")}
 - Duration: ${duration} days
 - Group size: ${trip.people} people
 - Activity level: ${answers.activityLevel}
@@ -220,7 +222,7 @@ Format as a clear day-by-day schedule.`;
           AI Travel Planner
         </CardTitle>
         <p className="text-sm text-muted-foreground">
-          Answer a few questions to get personalized travel suggestions for {trip?.destination}
+          Answer a few questions to get personalized travel suggestions for {trip?.title}.
         </p>
       </CardHeader>
       <CardContent className="grid gap-6">

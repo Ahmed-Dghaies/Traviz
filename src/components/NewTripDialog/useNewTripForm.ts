@@ -10,6 +10,7 @@ export const useNewTripForm = (defaultValues?: TripSchemaTypeIn) => {
     defaultValues: defaultValues || {
       title: "",
       countries: [],
+      cities: [],
       startDate: undefined,
       endDate: undefined,
       people: 1,

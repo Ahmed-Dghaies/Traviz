@@ -27,8 +27,6 @@ function StorePage() {
     [user, plans]
   );
 
-  console.log(user);
-
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-xl mx-auto p-4 pb-24">

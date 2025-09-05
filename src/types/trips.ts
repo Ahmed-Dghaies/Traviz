@@ -1,14 +1,15 @@
 export interface Trip {
   id: string;
-  userId?: string;
+  title: string;
+  userId: string;
   description?: string;
   countries: string[];
+  cities: string[];
   startDate: string;
   endDate: string;
   people: number;
-  thumbnail?: string | null;
-  checklist?: ChecklistItem[];
-  memo?: string;
+  thumbnail: string | null;
+  memo: string;
 }
 
 export interface Memo {
