@@ -1,7 +1,5 @@
-export interface Trip {
-  id: string;
+export interface TripDetails {
   title: string;
-  userId: string;
   description?: string;
   countries: string[];
   cities: string[];
@@ -9,7 +7,11 @@ export interface Trip {
   endDate: string;
   people: number;
   thumbnail: string | null;
-  memo: string;
+}
+
+export interface Trip extends TripDetails {
+  id: string;
+  userId: string;
 }
 
 export interface Memo {
@@ -33,14 +35,13 @@ export interface Activity {
   name: string;
   category?: string;
   startTime?: string;
-  endTime?: string;
+  endTime?: string | null;
   address?: string;
   url?: string;
   memo?: string;
   cost?: number;
   currency?: string;
   image?: string;
-  timezone?: string;
   order: number;
 }
 
@@ -52,12 +53,4 @@ export interface Document {
   url: string;
   uploadedAt: string;
   size: number;
-}
-
-export interface Plan {
-  id: string;
-  name: "Free" | "Premium" | "Traveler";
-  description: string;
-  price: number;
-  features: string[];
 }

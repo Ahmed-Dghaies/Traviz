@@ -51,7 +51,12 @@ const FormDatePickerField = <T extends FieldValues, TT extends FieldValues>({
                 selected={field.value ? new Date(field.value) : undefined}
                 onSelect={(date: Date | null) => {
                   if (date) {
-                    field.onChange(date.toISOString().split("T")[0]);
+                    const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+                      .toISOString()
+                      .split("T")[0];
+
+                    console.log(localDate);
+                    field.onChange(localDate);
                     setOpen(false);
                   }
                 }}

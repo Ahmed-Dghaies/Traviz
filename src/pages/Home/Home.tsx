@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Search, SortAsc, Users, ArrowRight, AlertTriangle } from "lucide-react";
+import { Plus, Search, SortAsc, Users, ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,30 +13,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BottomNav } from "@/components/bottom-nav";
 import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
 import { UserMenu } from "@/components/auth/components/UserMenu";
 import { useAuth } from "@/components/auth/components/AuthProvider";
 import { Link } from "react-router";
 
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
-import { useGetPlansQuery, useGetTripsQuery } from "@/lib/supabase/tripsApi";
+import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 import NewTripDialog from "@/components/NewTripDialog";
 
 function HomePage() {
   const { user } = useAuth();
   const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
-  const { data: plans } = useGetPlansQuery();
   const [seg, setSeg] = useState<"upcoming" | "past">("upcoming");
   const [sort, setSort] = useState<"date" | "name">("date");
   const [q, setQ] = useState("");
-
-  const currentPlan = useMemo(
-    () => plans?.find((plan) => plan.id === user?.user_metadata?.plan),
-    [user, plans]
-  );
 
   const filtered = useMemo(() => {
     const now = new Date();
@@ -47,49 +39,24 @@ function HomePage() {
       return seg === "upcoming" ? end >= now : end < now;
     });
     const byQuery = q.trim()
-      ? bySection.filter((t) =>
-          [t.destination, t.notes ?? ""].join(" ").toLowerCase().includes(q.trim().toLowerCase())
-        )
+      ? bySection.filter((t) => t.title.toLowerCase().includes(q.trim().toLowerCase()))
       : bySection;
     const sorted = [...byQuery].sort((a, b) => {
-      if (sort === "name") return a.destination.localeCompare(b.destination);
+      if (sort === "name") return a.title.localeCompare(b.title);
       return new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
     });
     return sorted;
   }, [trips, seg, q, sort]);
 
-  const userTripsCount = (trips ?? []).filter((t) => t.userId === user?.id).length;
-  const remaining = Math.max(
-    0,
-    (currentPlan?.name === "Free" ? 2 : Number.POSITIVE_INFINITY) - userTripsCount
-  );
-  const atLimit = currentPlan?.name === "Free" && remaining <= 0;
-
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-xl mx-auto p-4 pb-24">
+      <div className="max-w-2xl mx-auto p-4 pb-24">
         <header className="flex items-center justify-between mb-4">
           <h1 className="text-xl font-semibold">Traviz</h1>
           <div className="flex items-center gap-2">
-            <Link to="/store" className="text-sm underline underline-offset-4">
-              Store
-            </Link>
             <UserMenu />
           </div>
         </header>
-
-        {currentPlan?.name === "Free" && (
-          <Alert className="mb-4">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Free Plan</AlertTitle>
-            <AlertDescription>
-              You can create up to 2 trips. Remaining: {remaining}.{" "}
-              <Link to="/store" className="underline underline-offset-4">
-                Upgrade for unlimited trips and offline mode.
-              </Link>
-            </AlertDescription>
-          </Alert>
-        )}
 
         <div className="flex items-center gap-2 mb-3">
           <div className="relative flex-1">
@@ -128,19 +95,13 @@ function HomePage() {
             </CardHeader>
             <CardFooter>
               <NewTripDialog
-                disabled={atLimit}
                 trigger={
-                  <Button disabled={atLimit} className="bg-teal-600 hover:bg-teal-500 text-white">
+                  <Button className="bg-teal-600 hover:bg-teal-500 text-white">
                     <Plus className="h-4 w-4 mr-2" />
                     Create trip
                   </Button>
                 }
               />
-              {atLimit && (
-                <Button variant="outline" className="ml-2 bg-transparent" asChild>
-                  <Link to="/store">Upgrade</Link>
-                </Button>
-              )}
             </CardFooter>
           </Card>
         ) : (
@@ -151,13 +112,13 @@ function HomePage() {
                   <div className="relative h-40 w-full">
                     <img
                       src={t.thumbnail || thumbnailPlaceholder}
-                      alt={`Thumbnail for ${t.destination}`}
+                      alt={`Thumbnail for ${t.title}`}
                       className="object-cover w-full h-full"
                     />
                   </div>
                 </Link>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{t.destination}</CardTitle>
+                  <CardTitle className="text-lg">{t.title}</CardTitle>
                   <CardDescription className="text-xs">
                     {dateRange(t.startDate, t.endDate)}
                   </CardDescription>
@@ -179,9 +140,8 @@ function HomePage() {
           </div>
         )}
 
-        <div className="fixed bottom-20 right-4">
+        <div className="fixed bottom-5 right-4">
           <NewTripDialog
-            disabled={atLimit}
             trigger={
               <Button
                 size="icon"
@@ -194,8 +154,6 @@ function HomePage() {
           />
         </div>
       </div>
-
-      <BottomNav active="itineraries" />
     </main>
   );
 }

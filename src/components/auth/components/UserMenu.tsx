@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut, Crown } from "lucide-react";
+import { User, LogOut } from "lucide-react";
 import { useAuth } from "./AuthProvider";
 import { Link } from "react-router";
 
@@ -53,12 +53,6 @@ export function UserMenu() {
           <Link to="/profile" className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             Profile
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link to="/store" className="cursor-pointer">
-            <Crown className="mr-2 h-4 w-4" />
-            Upgrade Plan
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />

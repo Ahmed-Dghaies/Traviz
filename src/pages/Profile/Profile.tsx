@@ -59,7 +59,7 @@ function ProfilePage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-xl mx-auto p-4">
+      <div className="max-w-2xl mx-auto p-4">
         <header className="flex items-center gap-2 mb-6">
           <Button size="icon" variant="ghost" asChild>
             <Link to="/">

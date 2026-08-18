@@ -7,9 +7,8 @@ export const TripSchema = type({
   startDate: "string.date",
   endDate: "string.date",
   people: "string.numeric.parse | number",
-  thumbnail: "string|null?",
+  thumbnail: "string | null",
   description: "string?",
-  userId: "string?",
 });
 
 export type TripSchemaTypeIn = typeof TripSchema.inferIn;

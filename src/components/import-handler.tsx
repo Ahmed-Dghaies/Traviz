@@ -20,7 +20,7 @@ export default function ImportHandler() {
       importShared({ trip, activities })
         .unwrap()
         .then((tripId) => {
-          navigate(`/trip/${tripId}`);
+          navigate(`/itinerary/${tripId}`);
         });
     }
   }, [trip, activities, importShared, navigate]);

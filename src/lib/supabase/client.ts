@@ -5,7 +5,7 @@ let supabaseClient: SupabaseClient | null = null;
 export function createSupabaseClient(): SupabaseClient {
   if (!supabaseClient) {
     const supabaseUrl = import.meta.env.VITE_PUBLIC_SUPABASE_URL;
-    const supabaseAnonKey = import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
       throw new Error("Missing Supabase environment variables");
@@ -24,7 +24,7 @@ export const transformKeys = (obj: unknown, transformFn: (key: string) => string
       Object.entries(obj).map(([key, value]) => [
         transformFn(key),
         transformKeys(value, transformFn),
-      ])
+      ]),
     );
   }
   return obj;

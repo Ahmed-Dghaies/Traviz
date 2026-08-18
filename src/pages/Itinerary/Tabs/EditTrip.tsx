@@ -2,12 +2,12 @@ import TripForm from "@/components/TripForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import { useUpdateTripMutation } from "@/lib/supabase/tripsApi";
-import type { Trip } from "@/types/trips";
+import type { Trip, TripDetails } from "@/types/trips";
 
 const EditTrip = ({ trip }: { trip: Trip }) => {
   const [updateTrip] = useUpdateTripMutation();
 
-  const handleUpdates = async (updates: Omit<Trip, "id">) => {
+  const handleUpdates = async (updates: TripDetails) => {
     await updateTrip({ id: trip.id, updates });
   };
   return (

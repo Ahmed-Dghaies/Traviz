@@ -33,7 +33,7 @@ function ItineraryPage() {
 
   if (!trip) {
     return (
-      <main className="min-h-screen max-w-xl mx-auto p-4">
+      <main className="min-h-screen max-w-2xl mx-auto p-4">
         <div className="flex items-center gap-2 mb-4">
           <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="h-5 w-5" />
@@ -49,7 +49,7 @@ function ItineraryPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-xl mx-auto p-4 pb-24">
+      <div className="max-w-2xl mx-auto p-4 pb-24">
         <div className="flex items-center gap-2 mb-2">
           <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="h-5 w-5" />

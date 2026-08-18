@@ -77,7 +77,7 @@ Create a `.env` file in the root directory with your API credentials:
 ```text
 GEMINI_API_KEY=your_gemini_api_key_here
 VITE_PUBLIC_SUPABASE_URL=your_supabase_url_here
-VITE_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key_here
 ```
 
 Start the development server:
@@ -139,7 +139,7 @@ The application requires the following environment variables:
 
 - **GEMINI_API_KEY**: API key for Gemini services (if used)
 - **VITE_PUBLIC_SUPABASE_URL**: Your Supabase project URL
-- **VITE_PUBLIC_SUPABASE_ANON_KEY**: Your Supabase anonymous API key
+- **VITE_SUPABASE_PUBLISHABLE_KEY**: Your Supabase anonymous API key
 
 ---
 

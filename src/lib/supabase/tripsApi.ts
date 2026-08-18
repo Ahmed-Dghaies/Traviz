@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery, type FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { createSupabaseClient, transformKeys } from "./client";
 import { camelCase, snakeCase } from "lodash";
-import type { Activity, ChecklistItem, Document, Memo, Plan, Trip } from "@/types/trips";
-import type { TripSchemaTypeOut } from "@/components/NewTripDialog/schema";
+import type { Activity, ChecklistItem, Document, Memo, Trip, TripDetails } from "@/types/trips";
 
 const supabase = createSupabaseClient();
 
@@ -26,7 +25,7 @@ const handleSupabaseError = (error: unknown) => {
 export const tripsApi = createApi({
   reducerPath: "tripsApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
-  tagTypes: ["Trip", "Activity", "Document", "Checklist", "Plan", "Memo"],
+  tagTypes: ["Trip", "Activity", "Document", "Checklist", "Memo"],
   endpoints: (builder) => ({
     // Trips endpoints
     getTrips: builder.query<Trip[], string>({
@@ -66,7 +65,7 @@ export const tripsApi = createApi({
       providesTags: [],
     }),
 
-    addTrip: builder.mutation<{ id: string }, TripSchemaTypeOut>({
+    addTrip: builder.mutation<{ id: string }, TripDetails>({
       queryFn: async (trip) => {
         try {
           const tripToAdd = transformKeys(trip, snakeCase);
@@ -86,12 +85,21 @@ export const tripsApi = createApi({
 
     importShared: builder.mutation<
       string | null,
-      { trip: Omit<Trip, "id">; activities: Omit<Activity, "id" | "order">[] }
+      { trip: Trip; activities: Activity[] }
     >({
       queryFn: async ({ trip, activities }, { dispatch }) => {
         try {
-          // 1. First, add the trip
-          const tripToAdd = transformKeys(trip, snakeCase);
+          const {
+            data: { user },
+            error: userError,
+          } = await supabase.auth.getUser();
+
+          if (userError || !user) {
+            return handleSupabaseError(userError ?? new Error("You must be signed in to import a trip."));
+          }
+
+          const { id: _sourceTripId, userId: _sourceUserId, ...tripDetails } = trip;
+          const tripToAdd = transformKeys(tripDetails, snakeCase);
           const { data: tripData, error: tripError } = await supabase
             .from("trips")
             .insert(tripToAdd)
@@ -105,7 +113,14 @@ export const tripsApi = createApi({
           const newTripId = tripData.id;
 
           if (activities && activities.length > 0) {
-            const formattedActivities = transformKeys(activities, snakeCase);
+            const activitiesToAdd = activities.map(
+              ({ id: _sourceActivityId, tripId: _sourceActivityTripId, userId: _sourceActivityUserId, ...activity }) => ({
+                ...activity,
+                tripId: newTripId,
+                userId: user.id,
+              })
+            );
+            const formattedActivities = transformKeys(activitiesToAdd, snakeCase);
 
             const { error: activitiesError } = await supabase
               .from("activities")
@@ -129,7 +144,7 @@ export const tripsApi = createApi({
       invalidatesTags: [],
     }),
 
-    updateTrip: builder.mutation<void, { id: string; updates: Partial<Trip> }>({
+    updateTrip: builder.mutation<void, { id: string; updates: TripDetails }>({
       queryFn: async ({ id, updates }) => {
         try {
           const formattedUpdates = transformKeys(updates, snakeCase);
@@ -505,22 +520,26 @@ export const tripsApi = createApi({
       invalidatesTags: (_result, _error, { tripId }) => [{ type: "Memo", id: tripId }],
     }),
 
-    // Plan endpoints
-    getPlans: builder.query<Plan[], void>({
-      queryFn: async () => {
+    upsertMemo: builder.mutation<void, { tripId: string; memo: string }>({
+      queryFn: async ({ tripId, memo }) => {
         try {
-          const { data, error } = await supabase.from("plans").select("*");
+          const formattedMemo = transformKeys({ tripId, memo }, snakeCase);
+          const { error } = await supabase.from("memos").upsert(formattedMemo, {
+            onConflict: "trip_id",
+          });
+
           if (error) {
             return handleSupabaseError(error);
           }
-          const formattedPlans = transformKeys(data ?? [], camelCase) as Plan[];
-          return { data: formattedPlans };
+
+          return { data: undefined };
         } catch (error: unknown) {
           return handleSupabaseError(error);
         }
       },
-      providesTags: ["Plan"],
+      invalidatesTags: ["Memo"],
     }),
+
   }),
 });
 
@@ -547,5 +566,5 @@ export const {
   useGetMemoQuery,
   useAddMemoMutation,
   useUpdateMemoMutation,
-  useGetPlansQuery,
+  useUpsertMemoMutation,
 } = tripsApi;

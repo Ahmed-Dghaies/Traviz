@@ -6,16 +6,16 @@ import { Country, State } from "country-state-city";
 import FormFileInputField from "../FormFields/FormFileInputField";
 import { DialogFooter } from "../ui/dialog";
 import { Button } from "../ui/button";
-import type { TripSchemaTypeIn, TripSchemaTypeOut } from "../NewTripDialog/schema";
 import { useMemo } from "react";
 import type { Option } from "../ui/multi-select";
+import type { TripDetails } from "@/types/trips";
 
 const TripForm = ({
   onSubmit,
   defaultValues,
 }: {
-  onSubmit: (data: TripSchemaTypeOut) => void;
-  defaultValues?: TripSchemaTypeIn;
+  onSubmit: (data: TripDetails) => void;
+  defaultValues?: TripDetails;
 }) => {
   const { methods } = useNewTripForm(defaultValues);
   const {
@@ -36,7 +36,7 @@ const TripForm = ({
         value: c.name,
         code: c.isoCode,
       })),
-    []
+    [],
   );
 
   const citiesOptions = useMemo(() => {
@@ -51,10 +51,8 @@ const TripForm = ({
           value: c.name,
           group: country,
         })) ?? [];
-      //console.log("countryCities", countryCities);
       return countryCities;
     });
-    //console.log("allCities", allCities);
     return allCities;
   }, [countries, countryOptions]);
 
@@ -63,6 +61,13 @@ const TripForm = ({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" aria-label="New Trip Form">
         <div className="grid gap-4">
           <FormTextField control={control} name="title" label="Title" placeholder="Paris, France" />
+
+          <FormTextField
+            control={control}
+            name="description"
+            label="Description"
+            placeholder="A short summary of your trip"
+          />
 
           <MultiSelectField
             control={control}
