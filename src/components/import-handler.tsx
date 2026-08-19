@@ -1,11 +1,13 @@
 import { useEffect } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useNavigate, useParams } from "react-router";
+
 import {
   useGetActivitiesQuery,
   useGetTripQuery,
   useImportSharedMutation,
 } from "@/lib/supabase/tripsApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 export default function ImportHandler() {
   const params = useParams();
@@ -20,7 +22,7 @@ export default function ImportHandler() {
       importShared({ trip, activities })
         .unwrap()
         .then((tripId) => {
-          navigate(`/trip/${tripId}`);
+          navigate(`/itinerary/${tripId}`);
         });
     }
   }, [trip, activities, importShared, navigate]);

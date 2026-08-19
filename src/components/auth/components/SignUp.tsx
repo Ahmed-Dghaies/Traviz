@@ -1,11 +1,16 @@
-import { createSupabaseClient } from "@/lib/supabase/client";
 import { useState } from "react";
-import { Button } from "../../ui/button";
+
 import { Loader2, Lock, Mail, User } from "lucide-react";
-import { useGetPlansQuery } from "@/lib/supabase/tripsApi";
-import { useSignUpForm } from "../hooks/useSignInForm";
+import { FormProvider } from "react-hook-form";
+
+import { createSupabaseClient } from "@/lib/supabase/client";
+
 import { FormTextField } from "../../FormFields";
+import { Button } from "../../ui/button";
+import { useSignUpForm } from "../hooks/useSignInForm";
+
 import type { SignUpSchemaOut } from "../schemas/SignUpSchema";
+
 
 const SignUp = ({
   setMessage,
@@ -15,7 +20,6 @@ const SignUp = ({
   >;
 }) => {
   const [supabase] = useState(() => createSupabaseClient());
-  const { data: plans } = useGetPlansQuery();
   const [loading, setLoading] = useState(false);
 
   const { methods } = useSignUpForm();
@@ -26,31 +30,37 @@ const SignUp = ({
     formState: { isValid },
   } = methods;
 
-  const freePlan = plans?.find((plan) => plan.name === "Free");
-
   const handleSignUp = async (data: SignUpSchemaOut) => {
     setLoading(true);
     setMessage(null);
 
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
         data: {
           full_name: data.fullName,
-          plan: freePlan?.id,
         },
       },
     });
 
     if (error) {
       setMessage({ type: "error", text: error.message });
+    } else {
+      methods.reset();
+      setMessage({
+        type: "success",
+        text: signUpData.session
+          ? "Your account has been created. You are now signed in."
+          : "Your account has been created. Check your email to confirm your address.",
+      });
     }
     setLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(handleSignUp)} className="space-y-4">
       <FormTextField
         control={control}
         name="fullName"
@@ -72,6 +82,7 @@ const SignUp = ({
       <FormTextField
         control={control}
         name="passwordWithConfirmation.password"
+        type="password"
         icon={
           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         }
@@ -81,6 +92,7 @@ const SignUp = ({
       <FormTextField
         control={control}
         name="passwordWithConfirmation.confirmPassword"
+        type="password"
         icon={
           <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         }
@@ -96,7 +108,8 @@ const SignUp = ({
         {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         Sign Up
       </Button>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 

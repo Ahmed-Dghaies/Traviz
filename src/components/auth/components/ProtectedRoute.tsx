@@ -1,8 +1,11 @@
+import { Loader2 } from "lucide-react";
+
+import { AuthForm } from "./AuthForm";
+import { useAuth } from "./AuthProvider";
+
 import type React from "react";
 
-import { useAuth } from "./AuthProvider";
-import { AuthForm } from "./AuthForm";
-import { Loader2 } from "lucide-react";
+
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();

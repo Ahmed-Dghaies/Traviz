@@ -1,9 +1,13 @@
-import { useForm } from "react-hook-form";
-import { arktypeResolver } from "@hookform/resolvers/arktype";
-import type { SignUpSchemaIn, SignUpSchemaOut } from "../schemas/SignUpSchema";
-import SignUpSchema from "../schemas/SignUpSchema";
 import { useEffect, useMemo } from "react";
+
+import { arktypeResolver } from "@hookform/resolvers/arktype";
+import { useForm } from "react-hook-form";
+
+
+import SignUpSchema from "../schemas/SignUpSchema";
 import { doesPasswordFitRequirements } from "../utils";
+
+import type { SignUpSchemaIn, SignUpSchemaOut } from "../schemas/SignUpSchema";
 
 export const useSignUpForm = (defaultValues?: SignUpSchemaIn) => {
   const methods = useForm<SignUpSchemaIn, unknown, SignUpSchemaOut>({

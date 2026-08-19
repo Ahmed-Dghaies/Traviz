@@ -5,11 +5,12 @@ import MultipleSelector, {
   type Option,
   type MultipleSelectorProps,
 } from "@/components/ui/multi-select";
+
 import type { Control, FieldError, FieldValues, Path } from "react-hook-form";
 
 interface MultiSelectProps<T extends FieldValues, TT extends FieldValues>
   extends MultipleSelectorProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   control?: Control<T, unknown, TT extends T ? TT : any>;
   label?: string;
   name: Path<T>;

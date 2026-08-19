@@ -1,6 +1,242 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-<svg fill="#000000" width="800px" height="800px" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>plane-solid</title>
-    <path class="clr-i-solid clr-i-solid-path-1" d="M6.25,11.5,12,13.16l6.32-4.59-9.07.26A.52.52,0,0,0,9,8.91L6.13,10.56A.51.51,0,0,0,6.25,11.5Z"></path><path class="clr-i-solid clr-i-solid-path-2" d="M34.52,6.36,28.22,5a3.78,3.78,0,0,0-3.07.67L6.12,19.5l-4.57-.2a1.25,1.25,0,0,0-.83,2.22l4.45,3.53a.55.55,0,0,0,.53.09c1.27-.49,6-3,11.59-6.07l1.12,11.51a.55.55,0,0,0,.9.37l2.5-2.08a.76.76,0,0,0,.26-.45l2.37-13.29c4-2.22,7.82-4.37,10.51-5.89A1.55,1.55,0,0,0,34.52,6.36Z"></path>
-    <rect x="0" y="0" width="36" height="36" fill-opacity="0"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="320"
+     height="320"
+     viewBox="0 0 320 320"
+     fill="none">
+
+  <defs>
+    <linearGradient id="bg"
+                    x1="160"
+                    y1="0"
+                    x2="160"
+                    y2="320"
+                    gradientUnits="userSpaceOnUse">
+      <stop stop-color="#159FE5"/>
+      <stop offset="1" stop-color="#18B98B"/>
+    </linearGradient>
+
+    <linearGradient id="wave1"
+                    x1="34"
+                    y1="30"
+                    x2="286"
+                    y2="294"
+                    gradientUnits="userSpaceOnUse">
+      <stop stop-color="#55C8EE" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#0B9F9D" stop-opacity=".3"/>
+    </linearGradient>
+
+    <linearGradient id="wave2"
+                    x1="30"
+                    y1="120"
+                    x2="300"
+                    y2="310"
+                    gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B86D1" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#007F86" stop-opacity=".32"/>
+    </linearGradient>
+
+    <filter id="shadow"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%">
+      <feDropShadow
+        dx="0"
+        dy="4"
+        stdDeviation="4"
+        flood-color="#006B86"
+        flood-opacity=".24"/>
+    </filter>
+
+    <filter id="soft"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%">
+      <feDropShadow
+        dx="0"
+        dy="3"
+        stdDeviation="3"
+        flood-color="#006C82"
+        flood-opacity=".28"/>
+    </filter>
+
+    <clipPath id="roundClip">
+      <rect width="320" height="320" rx="58"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#roundClip)">
+
+    <!-- Background -->
+    <rect
+      width="320"
+      height="320"
+      fill="url(#bg)"/>
+
+    <!-- Layered wave shapes -->
+    <path
+      d="M-34 74
+         C42 18 93 35 145 67
+         C205 104 248 110 354 60
+         V163
+         C271 202 211 183 154 150
+         C91 115 47 113-34 175
+         V74Z"
+      fill="url(#wave1)"/>
+
+    <path
+      d="M-38 166
+         C35 113 92 121 149 154
+         C216 193 266 202 360 149
+         V257
+         C286 297 216 287 154 251
+         C92 216 43 217-38 277
+         V166Z"
+      fill="url(#wave2)"/>
+
+    <path
+      d="M-30 254
+         C47 216 98 221 158 250
+         C211 276 258 281 326 250
+         V338
+         H-30
+         V254Z"
+      fill="#087F83"
+      fill-opacity=".18"/>
+
+
+    <!-- Route shadow -->
+    <path
+      d="M51 272
+         C76 250 96 255 120 263
+         C150 274 174 263 180 237
+         C186 211 165 196 143 191
+         C118 185 99 191 91 172
+         C83 153 99 137 124 135
+         C151 133 171 140 190 148
+         C208 156 225 147 238 132"
+      stroke="#087B96"
+      stroke-opacity=".28"
+      stroke-width="16"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+
+
+    <!-- Solid route -->
+    <path
+      d="M51 272
+         C76 250 96 255 120 263
+         C150 274 174 263 180 237
+         C186 211 165 196 143 191
+         C118 185 99 191 91 172"
+      stroke="white"
+      stroke-width="12"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+
+
+    <!-- Dashed route -->
+    <path
+  d="M91 172
+     C83 153 99 137 124 135
+     C151 133 171 140 190 148
+     C208 156 225 147 238 132
+     C245 122 246 108 246 98"
+  stroke="white"
+  stroke-width="12"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-dasharray="22 15"/>
+
+
+    <!-- Route checkpoints -->
+    <g filter="url(#soft)">
+
+      <!-- Starting checkpoint -->
+      <circle
+        cx="50"
+        cy="275"
+        r="17"
+        fill="#2C8ED3"
+        stroke="white"
+        stroke-width="6"/>
+
+      <!-- Second checkpoint -->
+      <circle
+        cx="120"
+        cy="263"
+        r="17"
+        fill="#F49B45"
+        stroke="white"
+        stroke-width="6"/>
+
+      <!-- Third checkpoint / completed -->
+      <circle
+        cx="91"
+        cy="172"
+        r="19"
+        fill="#48C78E"
+        stroke="white"
+        stroke-width="7"/>
+
+      <!-- Fourth checkpoint -->
+      <circle
+        cx="190"
+        cy="148"
+        r="17"
+        fill="#278FD0"
+        stroke="white"
+        stroke-width="6"/>
+
+    </g>
+
+
+    <!-- Check on third checkpoint -->
+    <path
+      d="M80 172
+         L88 180
+         L103 162"
+      stroke="white"
+      stroke-width="7"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+
+
+    <!-- Destination location pin -->
+    <g filter="url(#shadow)">
+
+      <path
+        d="M246 39
+           C231 39 220 50 220 64
+           C220 83 246 108 246 108
+           C246 108 272 83 272 64
+           C272 50 261 39 246 39Z"
+        fill="#F04D49"
+        stroke="white"
+        stroke-width="6"
+        stroke-linejoin="round"/>
+
+      <circle
+        cx="246"
+        cy="64"
+        r="8"
+        fill="white"/>
+
+    </g>
+
+  </g>
+
+
+  <!-- Subtle outer highlight -->
+  <rect
+    x="3.5"
+    y="3.5"
+    width="313"
+    height="313"
+    rx="54.5"
+    stroke="white"
+    stroke-opacity=".12"
+    stroke-width="7"/>
+
 </svg>

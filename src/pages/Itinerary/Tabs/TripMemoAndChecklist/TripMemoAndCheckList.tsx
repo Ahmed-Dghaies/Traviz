@@ -1,9 +1,12 @@
+import { CheckSquare, FileText } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Trip } from "@/types/trips";
-import { CheckSquare, FileText } from "lucide-react";
+
 import Checklists from "./Checklists";
 import Memo from "./Memo";
+
+import type { Trip } from "@/types/trips";
 
 const TripMemoAndCheckList = ({ trip }: { trip: Trip }) => {
   return (

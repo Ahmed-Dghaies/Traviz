@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+
+import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -16,15 +17,15 @@ export function DatePicker({ label, onChange, value }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="flex flex-col gap-3">
-      <Label htmlFor="date" className="px-1">
+    <div className="grid gap-1.5">
+      <Label htmlFor="date" className="text-sm text-muted-foreground">
         {label}
       </Label>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" id="date" className="w-48 justify-between font-normal">
             {value ? value.toLocaleDateString() : "Select date"}
-            <ChevronDownIcon />
+            <CalendarIcon className="h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto overflow-hidden p-0" align="start">

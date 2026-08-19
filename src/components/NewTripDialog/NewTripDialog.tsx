@@ -1,6 +1,7 @@
-import type React from "react";
 import { useState } from "react";
+
 import { Plus } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,10 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAuth } from "../auth/components/AuthProvider";
 import { useAddTripMutation } from "@/lib/supabase/tripsApi";
+
 import TripForm from "../TripForm";
-import type { TripSchemaTypeOut } from "./schema";
+
+import type { TripDetails } from "@/types/trips";
+import type React from "react";
 
 const NewTripDialog = ({
   trigger,
@@ -22,16 +25,11 @@ const NewTripDialog = ({
   disabled?: boolean;
 }) => {
   const [addTrip] = useAddTripMutation();
-  const { user } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const onSubmit = async (data: TripSchemaTypeOut) => {
+  const onSubmit = async (data: TripDetails) => {
     try {
-      await addTrip({
-        ...data,
-        countries: data.countries,
-        userId: user?.id ?? "",
-      });
+      await addTrip(data);
       setOpen(false);
     } catch (error) {
       console.error(error);

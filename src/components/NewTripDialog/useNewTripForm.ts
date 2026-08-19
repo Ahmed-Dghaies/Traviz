@@ -1,5 +1,6 @@
-import { useForm } from "react-hook-form";
 import { arktypeResolver } from "@hookform/resolvers/arktype";
+import { useForm } from "react-hook-form";
+
 import { TripSchema, type TripSchemaTypeIn, type TripSchemaTypeOut } from "./schema";
 
 export const useNewTripForm = (defaultValues?: TripSchemaTypeIn) => {

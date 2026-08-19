@@ -1,21 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
 import { ArrowLeft, FileText, Clock8, StickyNote, Edit2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useNavigate, useParams } from "react-router";
 
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
 import { useAuth } from "@/components/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
-import { skipToken } from "@reduxjs/toolkit/query";
+
+import AiTravelPlanner from "./Tabs/AiTravelPlanner";
+import EditTrip from "./Tabs/EditTrip";
+import TripDocuments from "./Tabs/TripDocuments";
+import TripItinerary from "./Tabs/TripItinerary";
+import TripMemoAndCheckList from "./Tabs/TripMemoAndChecklist";
 import TripDropdown from "./TripDropdown";
 import TripHeader from "./TripHeader";
 import { formatDateRange } from "./utils";
-import EditTrip from "./Tabs/EditTrip";
-import TripItinerary from "./Tabs/TripItinerary";
-import TripMemoAndCheckList from "./Tabs/TripMemoAndChecklist";
-import AiTravelPlanner from "./Tabs/AiTravelPlanner";
-import TripDocuments from "./Tabs/TripDocuments";
 
 function ItineraryPage() {
   const params = useParams();
@@ -33,7 +35,7 @@ function ItineraryPage() {
 
   if (!trip) {
     return (
-      <main className="min-h-screen max-w-xl mx-auto p-4">
+      <main className="min-h-screen max-w-2xl mx-auto p-4">
         <div className="flex items-center gap-2 mb-4">
           <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="h-5 w-5" />
@@ -49,7 +51,7 @@ function ItineraryPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <div className="max-w-xl mx-auto p-4 pb-24">
+      <div className="max-w-2xl mx-auto p-4 pb-24">
         <div className="flex items-center gap-2 mb-2">
           <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
             <ArrowLeft className="h-5 w-5" />

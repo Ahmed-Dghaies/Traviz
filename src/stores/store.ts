@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import { tripsApi } from "@/lib/supabase/tripsApi";
 
 export const store = configureStore({

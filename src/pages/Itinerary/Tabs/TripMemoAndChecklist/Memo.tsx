@@ -1,27 +1,32 @@
 import { useEffect, useState } from "react";
-import { TabsContent } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
-import { useUpdateTripMutation } from "@/lib/supabase/tripsApi";
-import type { Trip } from "@/types/trips";
+
 import { FileText } from "lucide-react";
 
+import { TabsContent } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useGetMemosQuery, useUpsertMemoMutation } from "@/lib/supabase/tripsApi";
+
+import type { Trip } from "@/types/trips";
+
 const Memo = ({ trip }: { trip: Trip }) => {
-  const [updateTrip] = useUpdateTripMutation();
-  const [memo, setMemo] = useState(trip.memo ?? "");
+  const { data: memos } = useGetMemosQuery(trip.id);
+  const [upsertMemo] = useUpsertMemoMutation();
+  const savedMemo = memos?.[0]?.memo ?? "";
+  const [memo, setMemo] = useState(savedMemo);
 
   useEffect(() => {
-    setMemo(trip.memo ?? "");
-  }, [trip.memo]);
+    setMemo(savedMemo);
+  }, [savedMemo]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (memo !== trip.memo) {
-        updateTrip({ id: trip.id, updates: { memo } });
+      if (memo !== savedMemo) {
+        upsertMemo({ tripId: trip.id, memo });
       }
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [memo, trip.id, trip.memo, updateTrip]);
+  }, [memo, savedMemo, trip.id, upsertMemo]);
 
   return (
     <TabsContent value="memo" className="space-y-4">

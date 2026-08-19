@@ -1,8 +1,11 @@
-import { Loader2, Lock, Mail } from "lucide-react";
-import { Button } from "../../ui/button";
 import { useState } from "react";
+
+import { Loader2, Lock, Mail } from "lucide-react";
+
 import { createSupabaseClient } from "@/lib/supabase/client";
+
 import { TextField } from "../../FormFields/FormTextField";
+import { Button } from "../../ui/button";
 
 const SignIn = ({
   setMessage,
