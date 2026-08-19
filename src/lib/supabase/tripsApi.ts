@@ -70,7 +70,7 @@ export const tripsApi = createApi({
     addTrip: builder.mutation<{ id: string }, TripDetails>({
       queryFn: async (trip) => {
         try {
-          const tripToAdd = transformKeys(trip, snakeCase);
+          const tripToAdd = transformKeys(trip, snakeCase) as TripDetails;
           const { data, error } = await supabase.from("trips").insert(tripToAdd).select().single();
 
           if (error) {
@@ -85,10 +85,7 @@ export const tripsApi = createApi({
       invalidatesTags: ["Trip"],
     }),
 
-    importShared: builder.mutation<
-      string | null,
-      { trip: Trip; activities: Activity[] }
-    >({
+    importShared: builder.mutation<string | null, { trip: Trip; activities: Activity[] }>({
       queryFn: async ({ trip, activities }, { dispatch }) => {
         try {
           const {
@@ -97,11 +94,13 @@ export const tripsApi = createApi({
           } = await supabase.auth.getUser();
 
           if (userError || !user) {
-            return handleSupabaseError(userError ?? new Error("You must be signed in to import a trip."));
+            return handleSupabaseError(
+              userError ?? new Error("You must be signed in to import a trip."),
+            );
           }
 
           const { id: _sourceTripId, userId: _sourceUserId, ...tripDetails } = trip;
-          const tripToAdd = transformKeys(tripDetails, snakeCase);
+          const tripToAdd = transformKeys(tripDetails, snakeCase) as TripDetails;
           const { data: tripData, error: tripError } = await supabase
             .from("trips")
             .insert(tripToAdd)
@@ -116,13 +115,18 @@ export const tripsApi = createApi({
 
           if (activities && activities.length > 0) {
             const activitiesToAdd = activities.map(
-              ({ id: _sourceActivityId, tripId: _sourceActivityTripId, userId: _sourceActivityUserId, ...activity }) => ({
+              ({
+                id: _sourceActivityId,
+                tripId: _sourceActivityTripId,
+                userId: _sourceActivityUserId,
+                ...activity
+              }) => ({
                 ...activity,
                 tripId: newTripId,
                 userId: user.id,
-              })
+              }),
             );
-            const formattedActivities = transformKeys(activitiesToAdd, snakeCase);
+            const formattedActivities = transformKeys(activitiesToAdd, snakeCase) as TripDetails;
 
             const { error: activitiesError } = await supabase
               .from("activities")
@@ -149,7 +153,7 @@ export const tripsApi = createApi({
     updateTrip: builder.mutation<void, { id: string; updates: TripDetails }>({
       queryFn: async ({ id, updates }) => {
         try {
-          const formattedUpdates = transformKeys(updates, snakeCase);
+          const formattedUpdates = transformKeys(updates, snakeCase) as TripDetails;
           const { error } = await supabase.from("trips").update(formattedUpdates).eq("id", id);
 
           if (error) {
@@ -243,7 +247,7 @@ export const tripsApi = createApi({
           }
 
           const order = existingActivities?.length || 0;
-          const formattedActivity = transformKeys({ ...activity, order }, snakeCase);
+          const formattedActivity = transformKeys({ ...activity, order }, snakeCase) as Activity;
 
           const { error } = await supabase.from("activities").insert(formattedActivity);
 
@@ -262,7 +266,7 @@ export const tripsApi = createApi({
     updateActivity: builder.mutation<void, { id: string; updates: Partial<Activity> }>({
       queryFn: async ({ id, updates }) => {
         try {
-          const formattedUpdates = transformKeys(updates, snakeCase);
+          const formattedUpdates = transformKeys(updates, snakeCase) as Activity;
           const { error } = await supabase.from("activities").update(formattedUpdates).eq("id", id);
 
           if (error) {
@@ -324,8 +328,8 @@ export const tripsApi = createApi({
         try {
           const formattedDocument = transformKeys(
             { ...document, uploadedAt: new Date().toISOString() },
-            snakeCase
-          );
+            snakeCase,
+          ) as Document;
 
           const { error } = await supabase.from("documents").insert(formattedDocument);
 
@@ -386,7 +390,10 @@ export const tripsApi = createApi({
     addChecklistItem: builder.mutation<void, { tripId: string; text: string }>({
       queryFn: async ({ tripId, text }) => {
         try {
-          const formattedChecklist = transformKeys({ tripId, text, completed: false }, snakeCase);
+          const formattedChecklist = transformKeys(
+            { tripId, text, completed: false },
+            snakeCase,
+          ) as ChecklistItem;
 
           const { error } = await supabase.from("checklist").insert(formattedChecklist);
 
@@ -482,7 +489,7 @@ export const tripsApi = createApi({
     addMemo: builder.mutation<void, { tripId: string; memo: string }>({
       queryFn: async ({ tripId, memo }) => {
         try {
-          const formattedMemo = transformKeys({ tripId, memo }, snakeCase);
+          const formattedMemo = transformKeys({ tripId, memo }, snakeCase) as Memo;
           const { data, error } = await supabase
             .from("memos")
             .insert(formattedMemo)
@@ -504,7 +511,7 @@ export const tripsApi = createApi({
     updateMemo: builder.mutation<void, { tripId: string; memo: string }>({
       queryFn: async ({ tripId, memo }) => {
         try {
-          const formattedMemo = transformKeys({ tripId, memo }, snakeCase);
+          const formattedMemo = transformKeys({ tripId, memo }, snakeCase) as Memo;
           const { error } = await supabase
             .from("memos")
             .update(formattedMemo)
@@ -525,7 +532,7 @@ export const tripsApi = createApi({
     upsertMemo: builder.mutation<void, { tripId: string; memo: string }>({
       queryFn: async ({ tripId, memo }) => {
         try {
-          const formattedMemo = transformKeys({ tripId, memo }, snakeCase);
+          const formattedMemo = transformKeys({ tripId, memo }, snakeCase) as Memo;
           const { error } = await supabase.from("memos").upsert(formattedMemo, {
             onConflict: "trip_id",
           });
@@ -541,7 +548,6 @@ export const tripsApi = createApi({
       },
       invalidatesTags: ["Memo"],
     }),
-
   }),
 });
 
