@@ -4,10 +4,10 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { ArrowLeft, FileText, Clock8, StickyNote, Edit2, Sparkles } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router";
 
-import { useAuth } from "@/features/auth/components/AuthProvider";
-import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuth } from "@/features/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 import AiTravelPlanner from "./Tabs/AiTravelPlanner";

@@ -10,8 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 import { useAuth } from "@/features/auth/components/AuthProvider";
+import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 type PlannerState = "questions" | "generating" | "results" | "setup";
 

@@ -3,13 +3,13 @@ import { useState } from "react";
 import { Loader2, Lock, Mail, User } from "lucide-react";
 import { FormProvider } from "react-hook-form";
 
+import { FormTextField } from "@/components/FormFields";
+import { Button } from "@/components/ui/button";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
 import { useSignUpForm } from "../hooks/useSignInForm";
 
 import type { SignUpSchemaOut } from "../schemas/SignUpSchema";
-import { FormTextField } from "@/components/FormFields";
-import { Button } from "@/components/ui/button";
 
 const SignUp = ({
   setMessage,

@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/features/auth/components/AuthProvider";
 import {
   useAddActivityMutation,
   useDeleteActivityMutation,
@@ -25,7 +26,6 @@ import { createActivityDefaults, useActivityForm } from "./useActivityForm";
 import type { ActivitySchemaTypeIn, ActivitySchemaTypeOut } from "./schema";
 import type { Activity } from "@/types/trips";
 import type React from "react";
-import { useAuth } from "@/features/auth/components/AuthProvider";
 
 const CATEGORY_OPTIONS = [
   { id: "none", label: "None" },
