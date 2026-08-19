@@ -5,10 +5,10 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router";
 
 import { store } from "@/stores/store";
+import { AuthProvider } from "@/features/auth/components/AuthProvider.tsx";
 
 import "./index.css";
 import App from "./App.tsx";
-import { AuthProvider } from "./components/auth/components/AuthProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,5 +19,5 @@ createRoot(document.getElementById("root")!).render(
         </Provider>
       </AuthProvider>
     </BrowserRouter>
-  </StrictMode>
+  </StrictMode>,
 );

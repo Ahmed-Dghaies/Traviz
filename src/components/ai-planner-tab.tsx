@@ -11,9 +11,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
-
-import { useAuth } from "./auth/components/AuthProvider";
-
+import { useAuth } from "@/features/auth/components/AuthProvider";
 
 type PlannerState = "questions" | "generating" | "results" | "setup";
 
@@ -58,7 +56,7 @@ export function AIPlannerTab({ tripId }: { tripId: string }) {
     const duration =
       Math.ceil(
         (new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) /
-          (1000 * 60 * 60 * 24)
+          (1000 * 60 * 60 * 24),
       ) + 1;
 
     return `Create a detailed ${duration}-day travel itinerary for ${trip.title} for ${
@@ -117,7 +115,6 @@ Format as a clear day-by-day schedule.`;
 
       setSuggestions(data.suggestions);
       setState("results");
-       
     } catch (err: any) {
       setError(err?.message || "Failed to generate suggestions. Please try again.");
       setState("questions");

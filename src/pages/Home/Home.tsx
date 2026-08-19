@@ -5,10 +5,10 @@ import { Plus, Search, SortAsc, Users, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
-import { useAuth } from "@/components/auth/components/AuthProvider";
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
-import { UserMenu } from "@/components/auth/components/UserMenu";
+import { useAuth } from "@/features/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import NewTripDialog from "@/components/NewTripDialog";
+import { UserMenu } from "@/features/auth/components/UserMenu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";

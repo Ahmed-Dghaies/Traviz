@@ -1,12 +1,10 @@
-
 import { useState } from "react";
 
 import { skipToken } from "@reduxjs/toolkit/query";
 import { ArrowLeft, User, Mail, Save, Loader2 } from "lucide-react";
 import { Link } from "react-router";
 
-import { useAuth } from "@/components/auth/components/AuthProvider";
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { useAuth } from "@/features/auth/components/AuthProvider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,6 +15,7 @@ import { createSupabaseClient } from "@/lib/supabase/client";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 import type React from "react";
+import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 
 function ProfilePage() {
   const { user } = useAuth();

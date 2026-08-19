@@ -4,7 +4,6 @@ import { skipToken } from "@reduxjs/toolkit/query";
 import { Check, RotateCcw } from "lucide-react";
 import { FormProvider } from "react-hook-form";
 
-import { useAuth } from "@/components/auth/components/AuthProvider";
 import { CategoryIcon } from "@/components/category-icon";
 import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,7 @@ import { createActivityDefaults, useActivityForm } from "./useActivityForm";
 import type { ActivitySchemaTypeIn, ActivitySchemaTypeOut } from "./schema";
 import type { Activity } from "@/types/trips";
 import type React from "react";
+import { useAuth } from "@/features/auth/components/AuthProvider";
 
 const CATEGORY_OPTIONS = [
   { id: "none", label: "None" },
@@ -126,7 +126,11 @@ export function ActivityForm({
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-card px-4 py-3">
-              <button type="button" className="text-sm text-muted-foreground" onClick={() => setOpen(false)}>
+              <button
+                type="button"
+                className="text-sm text-muted-foreground"
+                onClick={() => setOpen(false)}
+              >
                 Close
               </button>
               <div className="font-semibold">{isEdit ? "Edit schedule" : "Create schedule"}</div>
@@ -173,7 +177,9 @@ export function ActivityForm({
                         <button
                           key={category.id}
                           type="button"
-                          onClick={() => setValue("category", category.id, { shouldValidate: true })}
+                          onClick={() =>
+                            setValue("category", category.id, { shouldValidate: true })
+                          }
                           className={cn(
                             "flex flex-col items-center justify-center rounded-xl border p-2.5 text-xs",
                             selected ? "border-teal-500 ring-2 ring-teal-500/30" : "border-border",
@@ -201,7 +207,11 @@ export function ActivityForm({
                       <Input placeholder="https://example.com" {...register("url")} />
                     </Field>
                     <Field label="Image">
-                      <Input type="file" accept="image/*" onChange={(event) => handleImageChange(event.target.files?.[0])} />
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => handleImageChange(event.target.files?.[0])}
+                      />
                     </Field>
                     <Field label="Memo / Notes">
                       <Textarea rows={3} {...register("memo")} />
@@ -235,7 +245,11 @@ export function ActivityForm({
                     Delete
                   </Button>
                 )}
-                <Button type="submit" disabled={!isValid} className="bg-teal-600 text-white hover:bg-teal-500">
+                <Button
+                  type="submit"
+                  disabled={!isValid}
+                  className="bg-teal-600 text-white hover:bg-teal-500"
+                >
                   {isEdit ? "Update" : "Create"}
                 </Button>
               </div>
@@ -263,7 +277,11 @@ function activityToFormValues(activity: Activity): ActivitySchemaTypeIn {
   };
 }
 
-function toActivityUpdates(data: ActivitySchemaTypeOut, userId: string | undefined, tripId: string) {
+function toActivityUpdates(
+  data: ActivitySchemaTypeOut,
+  userId: string | undefined,
+  tripId: string,
+) {
   return {
     date: data.date,
     name: data.title.trim(),
