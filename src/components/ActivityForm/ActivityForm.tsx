@@ -1,28 +1,31 @@
-import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { FormProvider } from "react-hook-form";
+
 import { skipToken } from "@reduxjs/toolkit/query";
 import { Check, RotateCcw } from "lucide-react";
+import { FormProvider } from "react-hook-form";
 
-import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { useAuth } from "@/components/auth/components/AuthProvider";
+import { CategoryIcon } from "@/components/category-icon";
+import { DatePicker } from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-import { CategoryIcon } from "@/components/category-icon";
-import { DatePicker } from "@/components/date-picker";
-import { cn } from "@/lib/utils";
-import { useAuth } from "@/components/auth/components/AuthProvider";
 import {
   useAddActivityMutation,
   useDeleteActivityMutation,
   useGetActivitiesQuery,
   useUpdateActivityMutation,
 } from "@/lib/supabase/tripsApi";
+import { cn } from "@/lib/utils";
 import { CATEGORY_PALETTE } from "@/types/categories";
-import type { Activity } from "@/types/trips";
+
 import { createActivityDefaults, useActivityForm } from "./useActivityForm";
+
 import type { ActivitySchemaTypeIn, ActivitySchemaTypeOut } from "./schema";
+import type { Activity } from "@/types/trips";
+import type React from "react";
 
 const CATEGORY_OPTIONS = [
   { id: "none", label: "None" },

@@ -1,11 +1,13 @@
 import { useEffect } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useNavigate, useParams } from "react-router";
+
 import {
   useGetActivitiesQuery,
   useGetTripQuery,
   useImportSharedMutation,
 } from "@/lib/supabase/tripsApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 
 export default function ImportHandler() {
   const params = useParams();

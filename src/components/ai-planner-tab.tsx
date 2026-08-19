@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { skipToken } from "@reduxjs/toolkit/query";
+import { Loader2, Sparkles, RefreshCw, AlertCircle, ExternalLink } from "lucide-react";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Sparkles, RefreshCw, AlertCircle, ExternalLink } from "lucide-react";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
+
 import { useAuth } from "./auth/components/AuthProvider";
-import { skipToken } from "@reduxjs/toolkit/query";
+
 
 type PlannerState = "questions" | "generating" | "results" | "setup";
 
@@ -113,7 +117,7 @@ Format as a clear day-by-day schedule.`;
 
       setSuggestions(data.suggestions);
       setState("results");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
     } catch (err: any) {
       setError(err?.message || "Failed to generate suggestions. Please try again.");
       setState("questions");

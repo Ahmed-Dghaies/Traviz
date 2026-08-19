@@ -1,3 +1,8 @@
+import { useState } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
+import { CheckSquare, Plus, Trash2 } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -9,10 +14,9 @@ import {
   useGetChecklistQuery,
   useToggleChecklistItemMutation,
 } from "@/lib/supabase/tripsApi";
+
 import type { Trip } from "@/types/trips";
-import { skipToken } from "@reduxjs/toolkit/query";
-import { CheckSquare, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+
 
 const Checklists = ({ trip }: { trip: Trip }) => {
   const { data: checklist } = useGetChecklistQuery(trip.id ?? skipToken);

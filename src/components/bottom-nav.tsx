@@ -1,6 +1,7 @@
 import { BookOpen } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Link } from "react-router";
+
+import { cn } from "@/lib/utils";
 
 export function BottomNav({ active }: { active: "itineraries" }) {
   return (

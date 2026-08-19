@@ -1,8 +1,11 @@
+import { CalendarDays, MapPin, Users } from "lucide-react";
+
 import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Trip } from "@/types/trips";
-import { CalendarDays, MapPin, Users } from "lucide-react";
+
 import { formatDateRange } from "./utils";
+
+import type { Trip } from "@/types/trips";
 
 const TripHeader = ({ trip }: { trip: Trip }) => {
   return (

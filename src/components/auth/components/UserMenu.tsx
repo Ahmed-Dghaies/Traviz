@@ -1,5 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { User, LogOut } from "lucide-react";
+import { Link } from "react-router";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,9 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, LogOut } from "lucide-react";
+
+
 import { useAuth } from "./AuthProvider";
-import { Link } from "react-router";
+
 
 export function UserMenu() {
   const { user, signOut } = useAuth();

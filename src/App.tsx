@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router";
 
 import { Home, NoMatch } from "@/pages";
 import Itinerary from "@/pages/Itinerary";
+
 import Profile from "./pages/Profile";
 
 const App = () => {

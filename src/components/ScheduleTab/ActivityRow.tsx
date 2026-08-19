@@ -2,10 +2,11 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Pencil, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { CategoryIcon } from "@/components/category-icon";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CATEGORY_PALETTE, type categoryPaletteKeys } from "@/types/categories";
+
 import type { Activity } from "@/types/trips";
 
 export function ActivityRow({

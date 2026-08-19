@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+
 import {
   DndContext,
   PointerSensor,
@@ -21,6 +22,7 @@ import {
   useGetActivitiesQuery,
   useUpdateActivityMutation,
 } from "@/lib/supabase/tripsApi";
+
 import type { Activity } from "@/types/trips";
 
 export function DayCard({

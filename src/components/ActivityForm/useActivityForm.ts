@@ -1,5 +1,6 @@
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { useForm } from "react-hook-form";
+
 import { ActivitySchema, type ActivitySchemaTypeIn, type ActivitySchemaTypeOut } from "./schema";
 
 export const createActivityDefaults = (date: string): ActivitySchemaTypeIn => ({

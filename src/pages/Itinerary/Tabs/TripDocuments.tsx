@@ -1,5 +1,6 @@
 import { DocumentsTab } from "@/components/documents-tab";
 import { TabsContent } from "@/components/ui/tabs";
+
 import type { Trip } from "@/types/trips";
 
 const TripDocuments = ({ trip }: { trip: Trip }) => {

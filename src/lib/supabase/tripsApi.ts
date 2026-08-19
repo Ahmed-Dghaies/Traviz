@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery, type FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { createSupabaseClient, transformKeys } from "./client";
 import { camelCase, snakeCase } from "lodash";
+
+import { createSupabaseClient, transformKeys } from "./client";
+
 import type { Activity, ChecklistItem, Document, Memo, Trip, TripDetails } from "@/types/trips";
 
 const supabase = createSupabaseClient();

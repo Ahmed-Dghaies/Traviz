@@ -1,3 +1,6 @@
+import { Copy, MoreHorizontal, Share2, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -6,9 +9,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDeleteTripMutation } from "@/lib/supabase/tripsApi";
+
 import type { Trip } from "@/types/trips";
-import { Copy, MoreHorizontal, Share2, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router";
 
 interface TripDropdownProps {
   trip: Trip;

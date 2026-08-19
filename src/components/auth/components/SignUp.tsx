@@ -1,11 +1,16 @@
-import { createSupabaseClient } from "@/lib/supabase/client";
 import { useState } from "react";
-import { Button } from "../../ui/button";
+
 import { Loader2, Lock, Mail, User } from "lucide-react";
-import { useSignUpForm } from "../hooks/useSignInForm";
-import { FormTextField } from "../../FormFields";
-import type { SignUpSchemaOut } from "../schemas/SignUpSchema";
 import { FormProvider } from "react-hook-form";
+
+import { createSupabaseClient } from "@/lib/supabase/client";
+
+import { FormTextField } from "../../FormFields";
+import { Button } from "../../ui/button";
+import { useSignUpForm } from "../hooks/useSignInForm";
+
+import type { SignUpSchemaOut } from "../schemas/SignUpSchema";
+
 
 const SignUp = ({
   setMessage,

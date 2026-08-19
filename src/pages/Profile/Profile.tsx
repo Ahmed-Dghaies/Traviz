@@ -1,19 +1,22 @@
-import type React from "react";
 
 import { useState } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
 import { ArrowLeft, User, Mail, Save, Loader2 } from "lucide-react";
+import { Link } from "react-router";
+
+import { useAuth } from "@/components/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useAuth } from "@/components/auth/components/AuthProvider";
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
-import { Link } from "react-router";
 import { createSupabaseClient } from "@/lib/supabase/client";
-import { skipToken } from "@reduxjs/toolkit/query";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
+
+import type React from "react";
 
 function ProfilePage() {
   const { user } = useAuth();

@@ -1,6 +1,7 @@
-import type React from "react";
 import { useState } from "react";
+
 import { Plus } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,8 +11,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useAddTripMutation } from "@/lib/supabase/tripsApi";
+
 import TripForm from "../TripForm";
+
 import type { TripDetails } from "@/types/trips";
+import type React from "react";
 
 const NewTripDialog = ({
   trigger,

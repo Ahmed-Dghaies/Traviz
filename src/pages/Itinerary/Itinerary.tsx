@@ -1,21 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
+
+import { skipToken } from "@reduxjs/toolkit/query";
 import { ArrowLeft, FileText, Clock8, StickyNote, Edit2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Link, useNavigate, useParams } from "react-router";
 
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
 import { useAuth } from "@/components/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
-import { skipToken } from "@reduxjs/toolkit/query";
+
+import AiTravelPlanner from "./Tabs/AiTravelPlanner";
+import EditTrip from "./Tabs/EditTrip";
+import TripDocuments from "./Tabs/TripDocuments";
+import TripItinerary from "./Tabs/TripItinerary";
+import TripMemoAndCheckList from "./Tabs/TripMemoAndChecklist";
 import TripDropdown from "./TripDropdown";
 import TripHeader from "./TripHeader";
 import { formatDateRange } from "./utils";
-import EditTrip from "./Tabs/EditTrip";
-import TripItinerary from "./Tabs/TripItinerary";
-import TripMemoAndCheckList from "./Tabs/TripMemoAndChecklist";
-import AiTravelPlanner from "./Tabs/AiTravelPlanner";
-import TripDocuments from "./Tabs/TripDocuments";
 
 function ItineraryPage() {
   const params = useParams();

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+
+import { FileText } from "lucide-react";
+
 import { TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useGetMemosQuery, useUpsertMemoMutation } from "@/lib/supabase/tripsApi";
+
 import type { Trip } from "@/types/trips";
-import { FileText } from "lucide-react";
 
 const Memo = ({ trip }: { trip: Trip }) => {
   const { data: memos } = useGetMemosQuery(trip.id);

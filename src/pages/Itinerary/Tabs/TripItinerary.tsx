@@ -1,5 +1,6 @@
 import { ScheduleTab } from "@/components/ScheduleTab";
 import { TabsContent } from "@/components/ui/tabs";
+
 import type { Trip } from "@/types/trips";
 
 const TripItinerary = ({ trip }: { trip: Trip }) => {

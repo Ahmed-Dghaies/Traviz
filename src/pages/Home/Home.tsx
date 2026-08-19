@@ -1,9 +1,17 @@
 import { useMemo, useState } from "react";
-import { Plus, Search, SortAsc, Users, ArrowRight } from "lucide-react";
 
+import { skipToken } from "@reduxjs/toolkit/query";
+import { Plus, Search, SortAsc, Users, ArrowRight } from "lucide-react";
+import { Link } from "react-router";
+
+import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
+import { useAuth } from "@/components/auth/components/AuthProvider";
+import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
+import { UserMenu } from "@/components/auth/components/UserMenu";
+import NewTripDialog from "@/components/NewTripDialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,16 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { ProtectedRoute } from "@/components/auth/components/ProtectedRoute";
-import { UserMenu } from "@/components/auth/components/UserMenu";
-import { useAuth } from "@/components/auth/components/AuthProvider";
-import { Link } from "react-router";
-
-import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
-import { skipToken } from "@reduxjs/toolkit/query";
-import NewTripDialog from "@/components/NewTripDialog";
 
 function HomePage() {
   const { user } = useAuth();

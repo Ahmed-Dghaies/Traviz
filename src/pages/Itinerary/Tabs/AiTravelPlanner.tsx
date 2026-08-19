@@ -1,5 +1,6 @@
 import { AIPlannerTab } from "@/components/ai-planner-tab";
 import { TabsContent } from "@/components/ui/tabs";
+
 import type { Trip } from "@/types/trips";
 
 const AiTravelPlanner = ({ trip }: { trip: Trip }) => {
