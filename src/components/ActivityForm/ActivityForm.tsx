@@ -122,7 +122,7 @@ export function ActivityForm({
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-w-lg overflow-hidden p-0">
+      <DialogContent className="max-w-[95vw] overflow-hidden p-0">
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-card px-4 py-3">
@@ -170,7 +170,7 @@ export function ActivityForm({
 
                 <section className="rounded-2xl border bg-card p-4">
                   <div className="mb-3 text-sm text-muted-foreground">Schedule icon</div>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                     {CATEGORY_OPTIONS.map((category) => {
                       const selected = selectedCategory === category.id;
                       return (
@@ -181,7 +181,7 @@ export function ActivityForm({
                             setValue("category", category.id, { shouldValidate: true })
                           }
                           className={cn(
-                            "flex flex-col items-center justify-center rounded-xl border p-2.5 text-xs",
+                            "flex min-w-00 flex-col items-center justify-center rounded-xl border p-2.5 text-xs",
                             selected ? "border-teal-500 ring-2 ring-teal-500/30" : "border-border",
                           )}
                           aria-pressed={selected}
@@ -189,7 +189,9 @@ export function ActivityForm({
                           <div className={cn("rounded-full p-2", CATEGORY_PALETTE[category.id])}>
                             <CategoryIcon category={category.id} className="h-5 w-5" />
                           </div>
-                          <div className="mt-1 text-center leading-tight">{category.label}</div>
+                          <div className="mt-1 w-full truncate text-center leading-tight">
+                            {category.label}
+                          </div>
                           {selected && <Check className="mt-1 h-4 w-4 text-teal-500" />}
                         </button>
                       );

@@ -5,11 +5,10 @@ import { FormProvider } from "react-hook-form";
 
 import { FormTextField } from "@/components/FormFields";
 import { Button } from "@/components/ui/button";
+import { useSignUpForm } from "@/features/auth/hooks/useSignInForm";
 import { createSupabaseClient } from "@/lib/supabase/client";
 
-import { useSignUpForm } from "../hooks/useSignInForm";
-
-import type { SignUpSchemaOut } from "../schemas/SignUpSchema";
+import type { SignUpSchemaOut } from "@/features/auth/schemas/SignUpSchema";
 
 const SignUp = ({
   setMessage,

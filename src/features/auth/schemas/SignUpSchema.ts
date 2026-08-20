@@ -1,6 +1,6 @@
 import { scope } from "arktype";
 
-import { doesPasswordFitRequirements } from "../utils";
+import { doesPasswordFitRequirements } from "@/features/auth/utils";
 
 const signUpScope = scope({
   "#password": () =>

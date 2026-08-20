@@ -6,15 +6,15 @@ import { Link, useNavigate, useParams } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AiTravelPlanner from "@/features/aiTravelPlanner/AiTravelPlanner";
 import { useAuth } from "@/features/auth/components/AuthProvider";
 import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
+import TripDocuments from "@/features/documents/TripDocuments";
+import TripItinerary from "@/features/itinerary/TripItinerary";
+import TripMemoAndCheckList from "@/features/memoAndChecklist";
+import EditTrip from "@/features/tripDetails/EditTrip";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
-import AiTravelPlanner from "./Tabs/AiTravelPlanner";
-import EditTrip from "./Tabs/EditTrip";
-import TripDocuments from "./Tabs/TripDocuments";
-import TripItinerary from "./Tabs/TripItinerary";
-import TripMemoAndCheckList from "./Tabs/TripMemoAndChecklist";
 import TripDropdown from "./TripDropdown";
 import TripHeader from "./TripHeader";
 import { formatDateRange } from "./utils";

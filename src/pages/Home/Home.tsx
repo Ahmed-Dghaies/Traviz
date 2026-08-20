@@ -1,12 +1,8 @@
 import { useMemo, useState } from "react";
 
 import { skipToken } from "@reduxjs/toolkit/query";
-import { Plus, Search, SortAsc, Users, ArrowRight } from "lucide-react";
-import { Link } from "react-router";
+import { Plus, Search, SortAsc } from "lucide-react";
 
-import thumbnailPlaceholder from "@/assets/thumbnail-placeholder.jpg";
-import NewTripDialog from "@/components/NewTripDialog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,6 +17,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/features/auth/components/AuthProvider";
 import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { UserMenu } from "@/features/auth/components/UserMenu";
+import NewTripDialog from "@/features/home/components/NewTripDialog";
+import TripCard from "@/features/home/components/TripCard";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 function HomePage() {
@@ -69,7 +67,7 @@ function HomePage() {
             />
           </div>
           <Select value={sort} onValueChange={(v) => setSort(v as "date" | "name")}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-35">
               <SortAsc className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
@@ -105,37 +103,9 @@ function HomePage() {
             </CardFooter>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {filtered.map((t) => (
-              <Card key={t.id} className="overflow-hidden">
-                <Link to={`/itinerary/${t.id}`} className="block">
-                  <div className="relative h-40 w-full">
-                    <img
-                      src={t.thumbnail || thumbnailPlaceholder}
-                      alt={`Thumbnail for ${t.title}`}
-                      className="object-cover w-full h-full"
-                    />
-                  </div>
-                </Link>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">{t.title}</CardTitle>
-                  <CardDescription className="text-xs">
-                    {dateRange(t.startDate, t.endDate)}
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter className="pt-2">
-                  <Badge variant="secondary" className="mr-auto inline-flex items-center gap-1">
-                    <Users className="h-3.5 w-3.5" />
-                    {t.people}
-                  </Badge>
-                  <Button asChild size="sm" variant="ghost">
-                    <Link to={`/itinerary/${t.id}`}>
-                      Open
-                      <ArrowRight className="h-4 w-4 ml-1" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+          <div className="grid grid-cols-2 gap-3">
+            {filtered.map((trip) => (
+              <TripCard key={trip.id} trip={trip} />
             ))}
           </div>
         )}
@@ -156,17 +126,6 @@ function HomePage() {
       </div>
     </main>
   );
-}
-
-function dateRange(s: string, e: string) {
-  const start = new Date(s);
-  const end = new Date(e);
-  const fmt = new Intl.DateTimeFormat(undefined, {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  return `${fmt.format(start)} – ${fmt.format(end)}`;
 }
 
 export default function Page() {

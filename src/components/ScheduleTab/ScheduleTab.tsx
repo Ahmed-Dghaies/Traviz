@@ -24,7 +24,7 @@ export function ScheduleTab({
           key={day.iso}
           tripId={tripId}
           dateIso={day.iso}
-          title={`${index + 1} days`}
+          title={`Day ${index + 1}`}
           dateLabel={formatDate(day.date)}
           onAdd={() => setOpenForDate(day.iso)}
         />

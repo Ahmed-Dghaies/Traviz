@@ -3,14 +3,14 @@ import { useMemo } from "react";
 import { Country, State } from "country-state-city";
 import { FormProvider } from "react-hook-form";
 
-import { FormDatePickerField, FormTextField } from "../FormFields";
-import FormFileInputField from "../FormFields/FormFileInputField";
-import MultiSelectField from "../FormFields/MultiSelectField";
-import { useNewTripForm } from "../NewTripDialog/useNewTripForm";
-import { Button } from "../ui/button";
-import { DialogFooter } from "../ui/dialog";
+import { FormDatePickerField, FormTextField } from "@/components/FormFields";
+import FormFileInputField from "@/components/FormFields/FormFileInputField";
+import MultiSelectField from "@/components/FormFields/MultiSelectField";
+import { Button } from "@/components/ui/button";
+import { DialogFooter } from "@/components/ui/dialog";
+import { useNewTripForm } from "@/features/home/components/NewTripDialog/useNewTripForm";
 
-import type { Option } from "../ui/multi-select";
+import type { Option } from "@/components/ui/multi-select";
 import type { TripDetails } from "@/types/trips";
 
 const TripForm = ({

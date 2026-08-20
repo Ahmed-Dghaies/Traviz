@@ -3,11 +3,10 @@ import { useEffect, useMemo } from "react";
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { useForm } from "react-hook-form";
 
+import SignUpSchema from "@/features/auth/schemas/SignUpSchema";
+import { doesPasswordFitRequirements } from "@/features/auth/utils";
 
-import SignUpSchema from "../schemas/SignUpSchema";
-import { doesPasswordFitRequirements } from "../utils";
-
-import type { SignUpSchemaIn, SignUpSchemaOut } from "../schemas/SignUpSchema";
+import type { SignUpSchemaIn, SignUpSchemaOut } from "@/features/auth/schemas/SignUpSchema";
 
 export const useSignUpForm = (defaultValues?: SignUpSchemaIn) => {
   const methods = useForm<SignUpSchemaIn, unknown, SignUpSchemaOut>({
