@@ -2,14 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import { skipToken } from "@reduxjs/toolkit/query";
 
-import { ActivityForm } from "@/components/ActivityForm";
-import { ActivityRow } from "@/components/ScheduleTab/ActivityRow";
-import { sameDay } from "@/components/ScheduleTab/utils";
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
-import {
-  useGetActivitiesQuery,
-} from "@/lib/supabase/tripsApi";
+import { ActivityForm } from "@/features/itinerary/components/ActivityForm";
+import { ActivityRow } from "@/features/itinerary/components/ScheduleTab/ActivityRow";
+import { sameDay } from "@/features/itinerary/components/ScheduleTab/utils";
+import { useGetActivitiesQuery } from "@/lib/supabase/tripsApi";
 
 import type { Activity } from "@/types/trips";
 
@@ -32,7 +30,9 @@ export function DayCard({
     () =>
       (activities ?? [])
         .filter((activity) => activity.tripId === tripId && sameDay(activity.date, dateIso))
-        .sort((firstActivity, secondActivity) => compareActivityTimes(firstActivity, secondActivity)),
+        .sort((firstActivity, secondActivity) =>
+          compareActivityTimes(firstActivity, secondActivity),
+        ),
     [activities, dateIso, tripId],
   );
   const [orderedActivities, setOrderedActivities] = useState<Activity[]>(list);

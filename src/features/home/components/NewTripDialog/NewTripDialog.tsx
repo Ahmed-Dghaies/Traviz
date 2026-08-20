@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import { Plus } from "lucide-react";
 
-import TripForm from "@/components/TripForm";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import TripForm from "@/features/tripDetails/components/TripForm";
 import { useAddTripMutation } from "@/lib/supabase/tripsApi";
 
 import type { TripDetails } from "@/types/trips";

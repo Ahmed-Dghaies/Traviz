@@ -8,7 +8,8 @@ import FormFileInputField from "@/components/FormFields/FormFileInputField";
 import MultiSelectField from "@/components/FormFields/MultiSelectField";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
-import { useNewTripForm } from "@/features/home/components/NewTripDialog/useNewTripForm";
+
+import { useNewTripForm } from "./useNewTripForm";
 
 import type { Option } from "@/components/ui/multi-select";
 import type { TripDetails } from "@/types/trips";

@@ -1,5 +1,6 @@
-import { ScheduleTab } from "@/components/ScheduleTab";
 import { TabsContent } from "@/components/ui/tabs";
+
+import { ScheduleTab } from "./components/ScheduleTab";
 
 import type { Trip } from "@/types/trips";
 

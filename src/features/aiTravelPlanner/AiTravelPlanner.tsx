@@ -1,5 +1,6 @@
-import { AIPlannerTab } from "@/components/ai-planner-tab";
 import { TabsContent } from "@/components/ui/tabs";
+
+import { AIPlannerTab } from "./components/AIPlannerTab";
 
 import type { Trip } from "@/types/trips";
 

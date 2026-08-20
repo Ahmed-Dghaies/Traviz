@@ -3,8 +3,8 @@ import { CheckSquare, FileText } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Checklists from "./Checklists";
-import Memo from "./Memo";
+import Checklists from "./components/Checklists";
+import Memo from "./components/Memo";
 
 import type { Trip } from "@/types/trips";
 
