@@ -10,6 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/features/auth/components/AuthProvider";
 import {
@@ -112,6 +119,8 @@ export function ActivityForm({
 
   const selectedCategory = watch("category");
   const selectedDate = watch("date");
+  const startTime = watch("startTime") ?? "";
+  const endTime = watch("endTime") ?? "";
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
@@ -161,8 +170,22 @@ export function ActivityForm({
 
                     <Field label="Hours">
                       <div className="grid grid-cols-2 gap-2">
-                        <Input type="time" aria-label="Start hour" {...register("startTime")} />
-                        <Input type="time" aria-label="End hour" {...register("endTime")} />
+                        <TimeSelect
+                          ariaLabel="Start hour"
+                          placeholder="Start time"
+                          value={startTime}
+                          onValueChange={(value) =>
+                            setValue("startTime", value, { shouldValidate: true })
+                          }
+                        />
+                        <TimeSelect
+                          ariaLabel="End hour"
+                          placeholder="End time"
+                          value={endTime}
+                          onValueChange={(value) =>
+                            setValue("endTime", value, { shouldValidate: true })
+                          }
+                        />
                       </div>
                     </Field>
                   </div>
@@ -327,3 +350,36 @@ function fromYmd(date: string) {
   const [year, month, day] = date.split("-").map(Number);
   return new Date(year, month - 1, day);
 }
+
+function TimeSelect({
+  ariaLabel,
+  placeholder,
+  value,
+  onValueChange,
+}: {
+  ariaLabel: string;
+  placeholder: string;
+  value: string;
+  onValueChange: (value: string) => void;
+}) {
+  return (
+    <Select value={value || undefined} onValueChange={onValueChange}>
+      <SelectTrigger className="w-full" aria-label={ariaLabel}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {TIME_OPTIONS.map((time) => (
+          <SelectItem key={time} value={time}>
+            {time}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+const TIME_OPTIONS = Array.from({ length: 24 * 4 }, (_, index) => {
+  const hours = Math.floor(index / 4);
+  const minutes = (index % 4) * 15;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+});
