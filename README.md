@@ -1,78 +1,40 @@
-# Traviz - Travel Organizer App
+# Traviz
 
-![Traviz Banner](https://via.placeholder.com/800x200/3B82F6/FFFFFF?text=Traviz+-+Your+Ultimate+Travel+Companion)
+Traviz is a travel organizer app for planning trips, schedules, notes, documents, and checklists in one place.
 
-A modern, cross-platform travel planning application built with **React** and **shadcn UI** components.  
-Traviz helps travelers create, manage, and share detailed itineraries with an intuitive interface.
+## What it does
 
----
+- Create and manage trips
+- Plan daily itineraries and activities
+- Keep notes and checklists
+- Store travel documents
+- Edit trip details in one place
 
-## ✨ Features
+## Tech Stack
 
-### Core Functionality
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Supabase
 
-- **Trip Management**: Create and organize trips with destinations, dates, and participant details
-- **Itinerary Planning**: Detailed daily schedules with activities, timing, and locations
-- **Checklists**: Packing and preparation checklists with progress tracking
-- **Document Storage**: Upload and access travel documents (tickets, reservations, etc.)
-- **Notes**: Freeform memo section for travel ideas and tips
+## Setup
 
-### Premium Features
+### Requirements
 
-- Unlimited trips (free version limited to 3 trips)
-- Offline access to itineraries and documents
-- Enhanced collaboration options
-- Increased document storage capacity
+- Node.js 18+
+- npm
 
----
-
-## 🎨 User Experience
-
-- Clean, modern interface following **shadcn UI** design principles
-- Dark/Light mode support
-- Responsive design for various screen sizes
-- Accessibility features including screen reader support
-- Web application with potential for mobile adaptation
-
----
-
-## 🛠 Technology Stack
-
-- **Frontend**: React with TypeScript
-- **UI Components**: shadcn UI with Radix UI primitives
-- **Backend**: Supabase for authentication and data storage
-- **State Management**: Zustand
-- **Drag & Drop**: @dnd-kit
-- **Icons**: Lucide React
-- **Styling**: Tailwind CSS
-- **Build Tool**: Vite
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-
-### Installation
-
-Clone the repository:
-
-```bash
-git clone <repository-url>
-cd traviz
-```
-
-Install dependencies:
+### Install
 
 ```bash
 npm install
 ```
 
-Set up environment variables:  
-Create a `.env` file in the root directory with your API credentials:
+### Environment variables
+
+Create a `.env` file in the project root:
 
 ```text
 GEMINI_API_KEY=your_gemini_api_key_here
@@ -80,109 +42,36 @@ VITE_PUBLIC_SUPABASE_URL=your_supabase_url_here
 VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_anon_key_here
 ```
 
-Start the development server:
+### Run locally
 
 ```bash
 npm run dev
 ```
 
-### Building for Production
+### Build
 
 ```bash
-# Build for production
 npm run build
+```
 
-# Preview the production build
+### Preview build
+
+```bash
 npm run preview
 ```
 
----
+## Project Structure
 
-## 📂 Project Structure
-
-```
+```text
 src/
-├── components/          # Reusable UI components
-│   ├── ui/             # shadcn-based components
-│   └── itinerary/      # Itinerary-specific components
-├── hooks/              # Custom React hooks
-├── stores/             # Zustand state management
-├── types/              # TypeScript type definitions
-├── utils/              # Utility functions
-├── pages/              # App pages
-│   ├── Home/           # Home page with trip cards
-│   ├── Itinerary/      # Itinerary detail view
-│   ├── Schedule/       # Daily schedule view
-│   ├── Checklist/      # Checklist management
-│   ├── Documents/      # Document storage
-│   ├── Memo/           # Notes section
-│   └── Store/          # Premium features store
-└── services/           # API and external services
-    └── supabase/       # Supabase client and queries
+├── components/   UI and shared components
+├── features/     Feature-specific modules
+├── pages/        App pages
+├── lib/          API clients and helpers
+├── stores/       State management
+└── types/        TypeScript types
 ```
 
----
+## Notes
 
-## 📦 Key Dependencies
-
-- `@supabase/supabase-js`: Database and authentication
-- `@dnd-kit/core` & `@dnd-kit/sortable`: Drag and drop functionality
-- `react-router`: Navigation
-- `lucide-react`: Icons
-- `zustand`: State management
-
----
-
-## 🔑 Environment Variables
-
-The application requires the following environment variables:
-
-- **GEMINI_API_KEY**: API key for Gemini services (if used)
-- **VITE_PUBLIC_SUPABASE_URL**: Your Supabase project URL
-- **VITE_SUPABASE_PUBLISHABLE_KEY**: Your Supabase anonymous API key
-
----
-
-## 🤝 Contributing
-
-We welcome contributions to **Traviz**! Please read our contributing guidelines before submitting pull requests.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 💬 Support
-
-For support, email **support@traviz.app** or join our **Slack channel**.
-
----
-
-## 🗺 Roadmap
-
-- Integration with mapping services
-- Real-time currency conversion
-- Weather integration for destinations
-- Advanced collaboration features
-- Integration with booking platforms
-
----
-
-## 🙏 Acknowledgments
-
-- **shadcn UI** for the beautiful component library
-- **Supabase** for the backend infrastructure
-- **The React community** for excellent tools and resources
-
----
-
-✨ **Traviz - Plan your journeys, create memories.**
+- The app uses Supabase for auth and data.
