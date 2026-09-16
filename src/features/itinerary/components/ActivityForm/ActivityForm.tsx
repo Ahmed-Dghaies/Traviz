@@ -6,6 +6,17 @@ import { FormProvider } from "react-hook-form";
 
 import { CategoryIcon } from "@/components/category-icon";
 import { DatePicker } from "@/components/date-picker";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -254,21 +265,35 @@ export function ActivityForm({
               </div>
             </ScrollArea>
 
-            <DialogFooter className="px-4 pb-4">
+            <DialogFooter className="px-4 py-3">
               <div className="ml-auto flex items-center gap-2">
                 {isEdit && activity && (
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    onClick={() => {
-                      if (confirm("Delete this activity?")) {
-                        deleteActivity(activity.id);
-                        setOpen(false);
-                      }
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button type="button" variant="destructive">
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete this activity?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. The activity will be permanently removed.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={async () => {
+                            await deleteActivity(activity.id);
+                            setOpen(false);
+                          }}
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 )}
                 <Button
                   type="submit"

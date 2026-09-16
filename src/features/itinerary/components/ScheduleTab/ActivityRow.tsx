@@ -6,7 +6,15 @@ import { CATEGORY_PALETTE, type categoryPaletteKeys } from "@/types/categories";
 
 import type { Activity } from "@/types/trips";
 
-export function ActivityRow({ activity, onOpen }: { activity: Activity; onOpen: () => void }) {
+export function ActivityRow({
+  activity,
+  onOpen,
+  isCurrent,
+}: {
+  activity: Activity;
+  onOpen: () => void;
+  isCurrent?: boolean;
+}) {
   const category = (activity.category as categoryPaletteKeys) || "none";
   const colorClass = CATEGORY_PALETTE[category] || "text-muted-foreground";
 
@@ -15,7 +23,8 @@ export function ActivityRow({ activity, onOpen }: { activity: Activity; onOpen: 
       type="button"
       onClick={onOpen}
       className={cn(
-        "flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-xl border bg-muted/30 p-2.5 text-left transition-colors hover:bg-muted/50",
+        "cursor-pointer flex w-full min-w-0 items-center gap-2 overflow-hidden rounded-xl border bg-muted/30 p-2.5 text-left transition-colors hover:bg-muted/50",
+        isCurrent && "border-teal-500 bg-teal-500/5 shadow-sm",
       )}
     >
       <div className={cn("shrink-0 rounded-full p-2", colorClass)}>

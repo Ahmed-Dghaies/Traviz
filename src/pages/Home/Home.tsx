@@ -18,12 +18,12 @@ import { useAuth } from "@/features/auth/components/AuthProvider";
 import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { UserMenu } from "@/features/auth/components/UserMenu";
 import NewTripDialog from "@/features/home/components/NewTripDialog";
-import TripCard from "@/features/home/components/TripCard";
+import TripCard, { TripCardPlaceholder } from "@/features/home/components/TripCard";
 import { useGetTripsQuery } from "@/lib/supabase/tripsApi";
 
 function HomePage() {
   const { user } = useAuth();
-  const { data: trips } = useGetTripsQuery(user?.id ?? skipToken);
+  const { data: trips, isLoading } = useGetTripsQuery(user?.id ?? skipToken);
   const [seg, setSeg] = useState<"upcoming" | "past">("upcoming");
   const [sort, setSort] = useState<"date" | "name">("date");
   const [q, setQ] = useState("");
@@ -85,7 +85,13 @@ function HomePage() {
           </TabsList>
         </Tabs>
 
-        {filtered.length === 0 ? (
+        {isLoading ? (
+          <div className="grid grid-cols-2 gap-3">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <TripCardPlaceholder key={index} />
+            ))}
+          </div>
+        ) : filtered.length === 0 ? (
           <Card className="border-dashed">
             <CardHeader>
               <CardTitle className="text-base">No trips here yet</CardTitle>
